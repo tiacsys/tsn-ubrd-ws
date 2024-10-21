@@ -157,6 +157,9 @@ Multiple runtime environments
    :widths: 5 15 50 5 5 5 5 5 5
    :stub-columns: 1
 
+   " ", "|Ninja|_:",    "|",                                  " ", " ", " ", " ", " ", " "
+   "x", "**1.12.1**",   "| ``TSN_ASDF_NINJA_VERSION``",       "x", " ", "x", " ", " ", " "
+   "x", "**1.11.1**",   "| ``TSN_ASDF_NINJA_VERSION``",       " ", "x", " ", "x", "x", "x"
    " ", "|CMake|_:",    "|",                                  " ", " ", " ", " ", " ", " "
    "x", "**3.30.5**",   "| ``TSN_ASDF_CMAKE_VERSION``
                          | ``TSN_ASDF_CMAKE_VERSION_330``",   "x", "x", "x", "x", "x", "x"

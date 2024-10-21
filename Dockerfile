@@ -426,3 +426,248 @@ FROM cmake-all AS cmake
 LABEL cmake.version_320=$TSN_ASDF_CMAKE_VERSION_320
 LABEL cmake.version_330=$TSN_ASDF_CMAKE_VERSION_330
 LABEL cmake.version=$TSN_ASDF_CMAKE_VERSION
+
+
+#  -- about 5 minutes
+#  _______________________________________
+#      _     _
+#      /|   /     ,               ,
+#  ---/-| -/-----------__--------------__-
+#    /  | /     /    /   )      /    /   )
+#  _/___|/_____/____/___/______/____(___(_
+#                             /
+#                         (_ /
+
+# ############################################################################
+#                                                                     ┏┓┓ ┓
+#   All architectures maintenance for Ninja build system              ┣┫┃ ┃
+#                                                                     ┛┗┗┛┗┛
+# ############################################################################
+
+FROM cmake AS ninja-all
+
+#
+# Ninja runtime versions
+# https://ninja-build.org/
+# https://github.com/ninja-build/ninja/releases
+# https://github.com/asdf-community/asdf-ninja
+# https://github.com/asdf-community/asdf-ninja/commits
+#
+
+# ############################################################################
+#
+#   AMD/x86 64-bit architecture maintenance for               /||\/||\ / /|
+#   Ninja build system                                       /-||  ||/(_)~|~
+#
+# ############################################################################
+
+FROM ninja-all AS ninja-amd64
+
+# Define Ninja versions to be installed via ASDF
+ENV TSN_ASDF_NINJA_VERSION=1.12.1
+
+# ############################################################################
+
+# Install Ninja versions and set default version
+RUN asdf install ninja $TSN_ASDF_NINJA_VERSION \
+ && asdf global  ninja $TSN_ASDF_NINJA_VERSION \
+ && asdf reshim  ninja \
+    \
+ && asdf local   ninja $TSN_ASDF_NINJA_VERSION \
+ && asdf list    ninja \
+    \
+ && ninja --version
+
+# ############################################################################
+#
+#   ARMv7 32-bit architecture maintenance for                       /||)|\/|
+#   Ninja build system                                             /-||\|  |
+#
+#   -- not supported by ASDF plugin, fall back to system package
+#
+# ############################################################################
+
+FROM ninja-all AS ninja-arm
+
+# Define Ninja version to be installed via Apt/Dpkg
+ENV TSN_ASDF_NINJA_VERSION=1.11.1
+
+# ############################################################################
+
+# switch to superuser
+USER root
+WORKDIR /
+
+# ############################################################################
+
+# Install requirements
+RUN apt-get --assume-yes update \
+ && apt-get --assume-yes install --no-install-recommends \
+    ninja-build \
+ && apt-get --assume-yes autoremove --purge \
+ && apt-get clean \
+ && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
+    \
+ && ninja --version
+
+# ############################################################################
+
+# switch to workspace user
+USER $WSUSER_NAME
+WORKDIR $WSUSER_HOME
+
+# ############################################################################
+#
+#   ARMv8 64-bit architecture maintenance for                 /||)|\/| / /|
+#   Ninja build system                                       /-||\|  |(_)~|~
+#
+#   -- HOTFIX: Avoid silent failure, with reason inside of cURL
+#      <- curl: (55) Send failure: Broken pipe
+#      <- OpenSSL SSL_write: Broken pipe, errno 32
+#
+# ############################################################################
+
+FROM ninja-all AS ninja-arm64
+
+# Define Ninja versions to be installed via ASDF
+ENV TSN_ASDF_NINJA_VERSION=1.12.1
+
+# ############################################################################
+
+# Install Ninja versions and set default version (with cURL HOTFIX)
+RUN echo "--insecure" > $WSUSER_HOME/.curlrc \
+ && asdf install ninja $TSN_ASDF_NINJA_VERSION \
+ && asdf global  ninja $TSN_ASDF_NINJA_VERSION \
+ && asdf reshim  ninja \
+    \
+ && rm -f $WSUSER_HOME/.curlrc \
+    \
+ && asdf local   ninja $TSN_ASDF_NINJA_VERSION \
+ && asdf list    ninja \
+    \
+ && ninja --version
+
+# ############################################################################
+#
+#   RISC-V 64-bit architecture maintenance for               |)|(`/`| // /|
+#   Ninja build system                                       |\|_)\,|/(_)~|~
+#
+#   -- not supported by ASDF plugin, fall back to system package
+#
+# ############################################################################
+
+FROM ninja-all AS ninja-riscv64
+
+# Define Ninja version to be installed via Apt/Dpkg
+ENV TSN_ASDF_NINJA_VERSION=1.11.1
+
+# ############################################################################
+
+# switch to superuser
+USER root
+WORKDIR /
+
+# ############################################################################
+
+# Install requirements
+RUN apt-get --assume-yes update \
+ && apt-get --assume-yes install --no-install-recommends \
+    ninja-build \
+ && apt-get --assume-yes autoremove --purge \
+ && apt-get clean \
+ && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
+    \
+ && ninja --version
+
+# ############################################################################
+
+# switch to workspace user
+USER $WSUSER_NAME
+WORKDIR $WSUSER_HOME
+
+# ############################################################################
+#
+#   IBM POWER8 architecture maintenance for                 |)|)/` / /| | [~
+#   Ninja build system                                      | | \,(_)~|~|_[_
+#
+#   -- not supported by ASDF plugin, fall back to system package
+#
+# ############################################################################
+
+FROM ninja-all AS ninja-ppc64le
+
+# Define Ninja version to be installed via Apt/Dpkg
+ENV TSN_ASDF_NINJA_VERSION=1.11.1
+
+# ############################################################################
+
+# switch to superuser
+USER root
+WORKDIR /
+
+# ############################################################################
+
+# Install requirements
+RUN apt-get --assume-yes update \
+ && apt-get --assume-yes install --no-install-recommends \
+    ninja-build \
+ && apt-get --assume-yes autoremove --purge \
+ && apt-get clean \
+ && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
+    \
+ && ninja --version
+
+# ############################################################################
+
+# switch to workspace user
+USER $WSUSER_NAME
+WORKDIR $WSUSER_HOME
+
+# ############################################################################
+#
+#   IBM z-Systems architecture maintenance for                   (`')(~)/\\/
+#   Ninja build system                                           _).) / \//\
+#
+#   -- not supported by ASDF plugin, fall back to system package
+#
+# ############################################################################
+
+FROM ninja-all AS ninja-s390x
+
+# Define Ninja version to be installed via Apt/Dpkg
+ENV TSN_ASDF_NINJA_VERSION=1.11.1
+
+# ############################################################################
+
+# switch to superuser
+USER root
+WORKDIR /
+
+# ############################################################################
+
+# Install requirements
+RUN apt-get --assume-yes update \
+ && apt-get --assume-yes install --no-install-recommends \
+    ninja-build \
+ && apt-get --assume-yes autoremove --purge \
+ && apt-get clean \
+ && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
+    \
+ && ninja --version
+
+# ############################################################################
+
+# switch to workspace user
+USER $WSUSER_NAME
+WORKDIR $WSUSER_HOME
+
+# ############################################################################
+#                                                                  ┏┓┳┳┓┏┓┓
+#   Final maintenance for Ninja build system                       ┣ ┃┃┃┣┫┃
+#                                                                  ┻ ┻┛┗┛┗┗┛
+# ############################################################################
+
+FROM ninja-${TARGETARCH} AS ninja
+
+# Adding labels for external usage
+LABEL ninja.version=$TSN_ASDF_NINJA_VERSION
