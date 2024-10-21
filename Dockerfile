@@ -361,3 +361,68 @@ RUN asdf plugin update --all \
     \
  && patch -p0 --verbose < asdf-vm.patch \
  && rm -vf asdf-vm.patch
+
+
+#  -- about 4 hours
+#  __________________________________________
+#        __      _   _
+#      /    )    /  /|            /
+#  ---/---------/| /-|-----__----/-__-----__-
+#    /         / |/  |   /   )  /(      /___)
+#  _(____/____/__/___|__(___(__/___\___(___ _
+#
+#
+
+# ############################################################################
+#                                                                     ┏┓┓ ┓
+#   All architectures maintenance for CMake configuration system      ┣┫┃ ┃
+#                                                                     ┛┗┗┛┗┛
+# ############################################################################
+
+FROM base AS cmake-all
+
+#
+# CMake runtime versions
+# https://cmake.org/download/#latest
+# https://cmake.org/cmake/help/latest/release/index.html
+# https://gitlab.kitware.com/cmake/community/-/wikis/home#specific
+# https://github.com/asdf-community/asdf-cmake
+# https://github.com/asdf-community/asdf-cmake/commits
+#
+
+# Define CMake versions to be installed via ASDF
+ENV TSN_ASDF_CMAKE_VERSION_320=3.20.6
+ENV TSN_ASDF_CMAKE_VERSION_330=3.30.5
+ENV TSN_ASDF_CMAKE_VERSION=$TSN_ASDF_CMAKE_VERSION_330
+
+# ############################################################################
+
+# Install CMake versions and set default version
+RUN asdf install cmake $TSN_ASDF_CMAKE_VERSION_320 \
+ && asdf global  cmake $TSN_ASDF_CMAKE_VERSION_320 \
+ && asdf reshim  cmake \
+    \
+ && asdf install cmake $TSN_ASDF_CMAKE_VERSION_330 \
+ && asdf global  cmake $TSN_ASDF_CMAKE_VERSION_330 \
+ && asdf reshim  cmake \
+    \
+ && asdf local   cmake $TSN_ASDF_CMAKE_VERSION \
+ && asdf list    cmake \
+    \
+ && cpack --version \
+ && ctest --version \
+ && cmake --version \
+ && cmake --system-information
+
+# ############################################################################
+#                                                                  ┏┓┳┳┓┏┓┓
+#   Final maintenance for CMake configuration system               ┣ ┃┃┃┣┫┃
+#                                                                  ┻ ┻┛┗┛┗┗┛
+# ############################################################################
+
+FROM cmake-all AS cmake
+
+# Adding labels for external usage
+LABEL cmake.version_320=$TSN_ASDF_CMAKE_VERSION_320
+LABEL cmake.version_330=$TSN_ASDF_CMAKE_VERSION_330
+LABEL cmake.version=$TSN_ASDF_CMAKE_VERSION

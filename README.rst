@@ -149,6 +149,21 @@ Ubuntu system packages
 - **Spell Checker**: `Enchant`_, `GNU Aspell`_, `Hunspell`_, `Ispell`_,
   `MySpell`_, `Pspell`_, `Nuspell`_
 
+Multiple runtime environments
+*****************************
+
+.. csv-table:: Runtime environments based on `ASDF`_
+   :header: "[*]_", "Runtime", "Shell Variable", "``amd64``", "``arm/v7``", "``arm64/v8``", "``riscv64``", "``ppc64le``", "``s390x``"
+   :widths: 5 15 50 5 5 5 5 5 5
+   :stub-columns: 1
+
+   " ", "|CMake|_:",    "|",                                  " ", " ", " ", " ", " ", " "
+   "x", "**3.30.5**",   "| ``TSN_ASDF_CMAKE_VERSION``
+                         | ``TSN_ASDF_CMAKE_VERSION_330``",   "x", "x", "x", "x", "x", "x"
+   " ", "*3.20.6*",     "| ``TSN_ASDF_CMAKE_VERSION_320``",   "x", "x", "x", "x", "x", "x"
+
+.. [*] Default version (bold).
+
 .. rubric:: `Ninja`_ extra requirements for `ASDF`_
 
 - https://github.com/asdf-vm/asdf-plugins?tab=readme-ov-file
