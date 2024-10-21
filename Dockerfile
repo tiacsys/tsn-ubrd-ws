@@ -191,11 +191,11 @@ EO-ASDF-VM-PATCH
 # Install ASDF required plugins and patch on demand locally
 RUN asdf plugin update --all \
  && asdf plugin add \
-         ninja \
-         https://github.com/asdf-community/asdf-ninja.git \
- && asdf plugin add \
          cmake \
          https://github.com/asdf-community/asdf-cmake.git \
+ && asdf plugin add \
+         ninja \
+         https://github.com/asdf-community/asdf-ninja.git \
  && asdf plugin add \
          python \
          https://github.com/asdf-community/asdf-python.git \
@@ -214,3 +214,50 @@ RUN asdf plugin update --all \
     \
  && patch -p0 --verbose < asdf-vm.patch \
  && rm -vf asdf-vm.patch
+
+# ############################################################################
+#
+# All architectures maintenance for CMake configuration system
+#
+# ############################################################################
+
+FROM base AS cmake-all
+
+#
+# CMake runtime versions
+# https://github.com/asdf-community/asdf-cmake
+# https://github.com/asdf-community/asdf-cmake/commits
+#
+
+# Define CMake versions to be installed via ASDF
+ENV TSN_ASDF_CMAKE_VERSION_320=3.20.6
+ENV TSN_ASDF_CMAKE_VERSION_330=3.30.5
+
+# ############################################################################
+
+# Install CMake versions and set default version
+RUN asdf install cmake $TSN_ASDF_CMAKE_VERSION_320 \
+ && asdf global  cmake $TSN_ASDF_CMAKE_VERSION_320 \
+ && asdf reshim  cmake \
+    \
+ && asdf install cmake $TSN_ASDF_CMAKE_VERSION_330 \
+ && asdf global  cmake $TSN_ASDF_CMAKE_VERSION_330 \
+ && asdf reshim  cmake \
+    \
+ && asdf local   cmake $TSN_ASDF_CMAKE_VERSION_330 \
+ && asdf list    cmake \
+    \
+ && cmake --version
+
+# Adding labels for external usage
+LABEL cmake.version_320=$TSN_ASDF_CMAKE_VERSION_320
+LABEL cmake.version_330=$TSN_ASDF_CMAKE_VERSION_330
+LABEL cmake.version=$TSN_ASDF_CMAKE_VERSION_330
+
+# ############################################################################
+#
+# Final maintenance for CMake configuration system
+#
+# ############################################################################
+
+FROM cmake-all AS cmake
