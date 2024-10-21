@@ -261,3 +261,43 @@ LABEL cmake.version=$TSN_ASDF_CMAKE_VERSION_330
 # ############################################################################
 
 FROM cmake-all AS cmake
+
+# ############################################################################
+#
+# All architectures maintenance for Ninja build system
+#
+# ############################################################################
+
+FROM cmake AS ninja-all
+
+#
+# Ninja runtime versions
+# https://github.com/asdf-community/asdf-ninja
+# https://github.com/asdf-community/asdf-ninja/commits
+#
+
+# Define Ninja versions to be installed via ASDF
+ENV TSN_ASDF_NINJA_VERSION=1.12.1
+
+# ############################################################################
+
+# Install Ninja versions and set default version
+RUN asdf install ninja $TSN_ASDF_NINJA_VERSION \
+ && asdf global  ninja $TSN_ASDF_NINJA_VERSION \
+ && asdf reshim  ninja \
+    \
+ && asdf local   ninja $TSN_ASDF_NINJA_VERSION \
+ && asdf list    ninja \
+    \
+ && ninja --version
+
+# Adding labels for external usage
+LABEL ninja.version=$TSN_ASDF_NINJA_VERSION
+
+# ############################################################################
+#
+# Final maintenance for Ninja build system
+#
+# ############################################################################
+
+FROM ninja-all AS ninja
