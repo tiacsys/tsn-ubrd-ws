@@ -1095,3 +1095,277 @@ LABEL python.virtualenv.version=$TSN_ASDF_PYPI_VIRTUALENV_VERSION
 LABEL python.wheel.version=$TSN_ASDF_PYPI_WHEEL_VERSION
 LABEL python.poetry.version=$TSN_ASDF_PYPI_POETRY_VERSION
 LABEL python.west.version=$TSN_ASDF_PYPI_WEST_VERSION
+
+
+#  -- about 10 minutes
+#  ___________________________________________
+#        __
+#      /    )           /
+#  ---/----------__----/-----__-----__-----__-
+#    /  --,    /   )  /    /   )  /   )  /   )
+#  _(____/____(___/__/____(___(__/___/__(___/_
+#                                          /
+#                                      (_ /
+
+# ############################################################################
+#                                                                     ┏┓┓ ┓
+#   All architectures maintenance for Golang runtime environments     ┣┫┃ ┃
+#                                                                     ┛┗┗┛┗┛
+# ############################################################################
+
+FROM python AS golang-all
+
+#
+# Golang runtime versions
+# https://go.dev/doc/devel/release
+# https://go.dev/dl
+# https://github.com/asdf-community/asdf-golang
+# https://github.com/asdf-community/asdf-golang/commits
+#
+
+# ############################################################################
+#
+#   AMD/x86 64-bit architecture maintenance for               /||\/||\ / /|
+#   Golang runtime environments                              /-||  ||/(_)~|~
+#
+# ############################################################################
+
+FROM golang-all AS golang-amd64
+
+# Define Golang versions to be installed via ASDF
+ENV TSN_ASDF_GOLANG_VERSION_2022=1.19.13
+ENV TSN_ASDF_GOLANG_VERSION_2023=1.21.13
+ENV TSN_ASDF_GOLANG_VERSION_2024=1.23.2
+ENV TSN_ASDF_GOLANG_VERSION=$TSN_ASDF_GOLANG_VERSION_2024
+
+# ############################################################################
+
+# Install Golang versions and set default version
+RUN asdf install golang $TSN_ASDF_GOLANG_VERSION_2022 \
+ && asdf global  golang $TSN_ASDF_GOLANG_VERSION_2022 \
+ && asdf reshim  golang \
+    \
+ && asdf install golang $TSN_ASDF_GOLANG_VERSION_2023 \
+ && asdf global  golang $TSN_ASDF_GOLANG_VERSION_2023 \
+ && asdf reshim  golang \
+    \
+ && asdf install golang $TSN_ASDF_GOLANG_VERSION_2024 \
+ && asdf global  golang $TSN_ASDF_GOLANG_VERSION_2024 \
+ && asdf reshim  golang \
+    \
+ && asdf local   golang $TSN_ASDF_GOLANG_VERSION \
+ && asdf list    golang \
+    \
+ && go version \
+ && go env
+
+# ############################################################################
+
+# Adding labels for external usage
+LABEL golang.version_2022=$TSN_ASDF_GOLANG_VERSION_2022
+LABEL golang.version_2023=$TSN_ASDF_GOLANG_VERSION_2023
+LABEL golang.version_2024=$TSN_ASDF_GOLANG_VERSION_2024
+
+# ############################################################################
+#
+#   ARMv7 32-bit architecture maintenance for                       /||)|\/|
+#   Golang runtime environments                                    /-||\|  |
+#
+# ############################################################################
+
+FROM golang-all AS golang-arm
+
+# Define Golang versions to be installed via ASDF
+ENV TSN_ASDF_GOLANG_VERSION_2024=1.23.2
+ENV TSN_ASDF_GOLANG_VERSION=$TSN_ASDF_GOLANG_VERSION_2024
+
+# ############################################################################
+
+# Install Golang versions and set default version
+RUN asdf install golang $TSN_ASDF_GOLANG_VERSION \
+ && asdf global  golang $TSN_ASDF_GOLANG_VERSION \
+ && asdf reshim  golang \
+    \
+ && asdf local   golang $TSN_ASDF_GOLANG_VERSION \
+ && asdf list    golang \
+    \
+ && go version \
+ && go env
+
+# ############################################################################
+
+# Adding labels for external usage
+LABEL golang.version_2024=$TSN_ASDF_GOLANG_VERSION_2024
+
+# ############################################################################
+#
+#   ARMv8 64-bit architecture maintenance for                 /||)|\/| / /|
+#   Golang runtime environments                              /-||\|  |(_)~|~
+#
+#   -- HOTFIX: Avoid silent failure, with reason inside of cURL
+#      <- curl: (55) Send failure: Broken pipe
+#      <- OpenSSL SSL_write: Broken pipe, errno 32
+#
+# ############################################################################
+
+FROM golang-all AS golang-arm64
+
+# Define Golang versions to be installed via ASDF
+ENV TSN_ASDF_GOLANG_VERSION_2022=1.19.13
+ENV TSN_ASDF_GOLANG_VERSION_2023=1.21.13
+ENV TSN_ASDF_GOLANG_VERSION_2024=1.23.2
+ENV TSN_ASDF_GOLANG_VERSION=$TSN_ASDF_GOLANG_VERSION_2024
+
+# ############################################################################
+
+# Install Golang versions and set default version (with cURL HOTFIX)
+RUN echo "--insecure" > $WSUSER_HOME/.curlrc \
+ && asdf install golang $TSN_ASDF_GOLANG_VERSION_2022 \
+ && asdf global  golang $TSN_ASDF_GOLANG_VERSION_2022 \
+ && asdf reshim  golang \
+    \
+ && asdf install golang $TSN_ASDF_GOLANG_VERSION_2023 \
+ && asdf global  golang $TSN_ASDF_GOLANG_VERSION_2023 \
+ && asdf reshim  golang \
+    \
+ && asdf install golang $TSN_ASDF_GOLANG_VERSION_2024 \
+ && asdf global  golang $TSN_ASDF_GOLANG_VERSION_2024 \
+ && asdf reshim  golang \
+    \
+ && rm -f $WSUSER_HOME/.curlrc \
+    \
+ && asdf local   golang $TSN_ASDF_GOLANG_VERSION \
+ && asdf list    golang \
+    \
+ && go version \
+ && go env
+
+# ############################################################################
+
+# Adding labels for external usage
+LABEL golang.version_2022=$TSN_ASDF_GOLANG_VERSION_2022
+LABEL golang.version_2023=$TSN_ASDF_GOLANG_VERSION_2023
+LABEL golang.version_2024=$TSN_ASDF_GOLANG_VERSION_2024
+
+# ############################################################################
+#
+#   RISC-V 64-bit architecture maintenance for               |)|(`/`| // /|
+#   Golang runtime environments                              |\|_)\,|/(_)~|~
+#
+# ############################################################################
+
+FROM golang-all AS golang-riscv64
+
+# Define Golang versions to be installed via ASDF
+ENV TSN_ASDF_GOLANG_VERSION_2024=1.23.2
+ENV TSN_ASDF_GOLANG_VERSION=$TSN_ASDF_GOLANG_VERSION_2024
+
+# ############################################################################
+
+# Install Golang versions and set default version
+RUN asdf install golang $TSN_ASDF_GOLANG_VERSION \
+ && asdf global  golang $TSN_ASDF_GOLANG_VERSION \
+ && asdf reshim  golang \
+    \
+ && asdf local   golang $TSN_ASDF_GOLANG_VERSION \
+ && asdf list    golang \
+    \
+ && go version \
+ && go env
+
+# ############################################################################
+
+# Adding labels for external usage
+LABEL golang.version_2024=$TSN_ASDF_GOLANG_VERSION_2024
+
+# ############################################################################
+#
+#   IBM POWER8 architecture maintenance for                 |)|)/` / /| | [~
+#   Golang runtime environments                             | | \,(_)~|~|_[_
+#
+# ############################################################################
+
+FROM golang-all AS golang-ppc64le
+
+# Define Golang versions to be installed via ASDF
+ENV TSN_ASDF_GOLANG_VERSION_2024=1.23.2
+ENV TSN_ASDF_GOLANG_VERSION=$TSN_ASDF_GOLANG_VERSION_2024
+
+# ############################################################################
+
+# Install Golang versions and set default version
+RUN asdf install golang $TSN_ASDF_GOLANG_VERSION \
+ && asdf global  golang $TSN_ASDF_GOLANG_VERSION \
+ && asdf reshim  golang \
+    \
+ && asdf local   golang $TSN_ASDF_GOLANG_VERSION \
+ && asdf list    golang \
+    \
+ && go version \
+ && go env
+
+# ############################################################################
+
+# Adding labels for external usage
+LABEL golang.version_2024=$TSN_ASDF_GOLANG_VERSION_2024
+
+# ############################################################################
+#
+#   IBM z-Systems architecture maintenance for                   (`')(~)/\\/
+#   Golang runtime environments                                  _).) / \//\
+#
+#   -- not supported by Golang cross compiling, fall back to system package
+#
+# ############################################################################
+
+FROM golang-all AS golang-s390x
+
+# Define Golang versions to be installed via ASDF
+ENV TSN_ASDF_GOLANG_VERSION_2023=1.21.9
+ENV TSN_ASDF_GOLANG_VERSION_2024=1.22.2
+ENV TSN_ASDF_GOLANG_VERSION=$TSN_ASDF_GOLANG_VERSION_2024
+
+# ############################################################################
+
+# switch to superuser
+USER root
+WORKDIR /
+
+# ############################################################################
+
+# Install requirements
+RUN apt-get --assume-yes update \
+ && apt-get --assume-yes install --no-install-recommends \
+    golang-go \
+    golang-1.23-go \
+    golang-1.22-go \
+    golang-1.21-go \
+ && apt-get --assume-yes autoremove --purge \
+ && apt-get clean \
+ && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
+    \
+ && go version \
+ && go env
+
+# ############################################################################
+
+# switch to workspace user
+USER $WSUSER_NAME
+WORKDIR $WSUSER_HOME
+
+# ############################################################################
+
+# Adding labels for external usage
+LABEL golang.version_2024=$TSN_ASDF_GOLANG_VERSION_2024
+LABEL golang.version_2023=$TSN_ASDF_GOLANG_VERSION_2023
+
+# ############################################################################
+#                                                                  ┏┓┳┳┓┏┓┓
+#   Final maintenance for Golang runtime environments              ┣ ┃┃┃┣┫┃
+#                                                                  ┻ ┻┛┗┛┗┗┛
+# ############################################################################
+
+FROM golang-${TARGETARCH} AS golang
+
+# Adding labels for external usage
+LABEL golang.version=$TSN_ASDF_GOLANG_VERSION

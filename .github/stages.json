@@ -4,6 +4,7 @@
 		{ "stage": "cmake" },
 		{ "stage": "ninja" },
 		{ "stage": "python" },
-		{ "stage": "push", "ghr-free-disk": false }
+		{ "stage": "golang", "ghr-free-disk": true },
+		{ "stage": "push", "ghr-free-disk": true }
 	]
 }

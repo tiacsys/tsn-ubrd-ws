@@ -169,8 +169,19 @@ Multiple runtime environments
    "x", "**3.12.7**",   "| ``TSN_ASDF_PYTHON_VERSION``
                          | ``TSN_ASDF_PYTHON_VERSION_312``",  "x", "x", "x", "x", "x", "x"
    " ", "*3.10.15*",    "| ``TSN_ASDF_PYTHON_VERSION_310``",  "x", " ", "x", " ", " ", " "
+   " ", "|Golang|_:",   "|",                                  " ", " ", " ", " ", " ", " "
+   "x", "**1.23.2**",   "| ``TSN_ASDF_GOLANG_VERSION``
+                         | ``TSN_ASDF_GOLANG_VERSION_2024``", "x", "x", "x", "x", "x", " "
+   " ", "*1.23.1*",     "|",                                  " ", " ", " ", " ", " ", "#"
+   "x", "**1.22.2**",   "| ``TSN_ASDF_GOLANG_VERSION``
+                         | ``TSN_ASDF_GOLANG_VERSION_2024``", " ", " ", " ", " ", " ", "#"
+   " ", "*1.21.13*",    "| ``TSN_ASDF_GOLANG_VERSION_2023``", "x", " ", "x", " ", " ", " "
+   " ", "*1.21.9*",     "| ``TSN_ASDF_GOLANG_VERSION_2023``", " ", " ", " ", " ", " ", "#"
+   " ", "*1.19.13*",    "| ``TSN_ASDF_GOLANG_VERSION_2022``", "x", " ", "x", " ", " ", " "
 
 .. [*] Default version (bold).
+
+       :#: cross compile issues, fall back to Ubuntu system packages
 
 .. csv-table:: Python 3 packages from `PyPI`_ based on `Pip`_
    :header: "Package", "Shell Variable", "``amd64``", "``arm/v7``", "``arm64/v8``", "``riscv64``", "``ppc64le``", "``s390x``"
