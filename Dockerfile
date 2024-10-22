@@ -671,3 +671,427 @@ FROM ninja-${TARGETARCH} AS ninja
 
 # Adding labels for external usage
 LABEL ninja.version=$TSN_ASDF_NINJA_VERSION
+
+
+#  -- about 2 hours
+#  ____________________________________________
+#      ____
+#      /    )                 /
+#  ---/____/----------_/_----/__-----__-----__-
+#    /         /   /  /     /   )  /   )  /   )
+#  _/_________(___/__(_ ___/___/__(___/__/___/_
+#                /
+#            (_ /
+
+# ############################################################################
+#                                                                     ┏┓┓ ┓
+#   All architectures maintenance for Python runtime environments     ┣┫┃ ┃
+#                                                                     ┛┗┗┛┗┛
+# ############################################################################
+
+FROM ninja AS python-all
+
+#
+# Python runtime versions
+# https://www.python.org/downloads
+# https://devguide.python.org/versions
+# https://github.com/asdf-community/asdf-python
+# https://github.com/asdf-community/asdf-python/commits
+#
+
+# Define Python package versions to be installed via pip
+# - https://pypi.org/project/pip/24.3.1
+# - https://pypi.org/project/setuptools/75.3.0
+# - https://pypi.org/project/virtualenv/20.27.1
+# - https://pypi.org/project/wheel/0.44.0
+# - https://pypi.org/project/poetry/1.8.4
+# - https://pypi.org/project/west/1.3.0
+ENV TSN_ASDF_PYPI_PIP_VERSION=24.3.1
+ENV TSN_ASDF_PYPI_SETUPTOOLS_VERSION=75.3.0
+ENV TSN_ASDF_PYPI_VIRTUALENV_VERSION=20.27.1
+ENV TSN_ASDF_PYPI_WHEEL_VERSION=0.44.0
+ENV TSN_ASDF_PYPI_POETRY_VERSION=1.8.4
+ENV TSN_ASDF_PYPI_WEST_VERSION=1.3.0
+
+# Define CPython default behaviour for compilations (shared libraries)
+# ENV PYTHON_BUILD_OPTS="--verbose"
+ENV PYTHON_CONFIGURE_OPTS="--enable-shared"
+
+# ############################################################################
+#
+#   AMD/x86 64-bit architecture maintenance for               /||\/||\ / /|
+#   Python runtime environments                              /-||  ||/(_)~|~
+#
+# ############################################################################
+
+FROM python-all AS python-amd64
+
+# Define Python versions to be installed via ASDF
+ENV TSN_ASDF_PYTHON_VERSION_310=3.10.15
+ENV TSN_ASDF_PYTHON_VERSION_312=3.12.7
+ENV TSN_ASDF_PYTHON_VERSION_313=3.13.0
+ENV TSN_ASDF_PYTHON_VERSION=$TSN_ASDF_PYTHON_VERSION_312
+
+### NOT YET ### # Define CPython default optimization for compilations (PGO and LTO active)
+### NOT YET ### ENV PYTHON_CONFIGURE_OPTS="$PYTHON_CONFIGURE_OPTS --enable-optimizations"
+### NOT YET ### ENV PYTHON_CONFIGURE_OPTS="$PYTHON_CONFIGURE_OPTS --with-lto"
+
+# ############################################################################
+
+# Install Python versions and set default version
+RUN echo "pip==$TSN_ASDF_PYPI_PIP_VERSION" \
+ >> $WSUSER_HOME/.default-python-packages \
+ && echo "setuptools==$TSN_ASDF_PYPI_SETUPTOOLS_VERSION" \
+ >> $WSUSER_HOME/.default-python-packages \
+ && echo "virtualenv==$TSN_ASDF_PYPI_VIRTUALENV_VERSION" \
+ >> $WSUSER_HOME/.default-python-packages \
+ && echo "wheel==$TSN_ASDF_PYPI_WHEEL_VERSION" \
+ >> $WSUSER_HOME/.default-python-packages \
+ && echo "poetry==$TSN_ASDF_PYPI_POETRY_VERSION" \
+ >> $WSUSER_HOME/.default-python-packages \
+ && echo "west==$TSN_ASDF_PYPI_WEST_VERSION" \
+ >> $WSUSER_HOME/.default-python-packages \
+    \
+ && asdf install python $TSN_ASDF_PYTHON_VERSION_310 \
+ && asdf global  python $TSN_ASDF_PYTHON_VERSION_310 \
+ && asdf reshim  python \
+    \
+ && asdf install python $TSN_ASDF_PYTHON_VERSION_312 \
+ && asdf global  python $TSN_ASDF_PYTHON_VERSION_312 \
+ && asdf reshim  python \
+    \
+ && asdf install python $TSN_ASDF_PYTHON_VERSION_313 \
+ && asdf global  python $TSN_ASDF_PYTHON_VERSION_313 \
+ && asdf reshim  python \
+    \
+ && asdf local   python $TSN_ASDF_PYTHON_VERSION \
+ && asdf list    python \
+    \
+ && pip --version \
+ && pip3 --version \
+ && pip3.12 --version \
+ && python --version \
+ && python3 --version \
+ && python3.12 --version \
+ && python-config --help \
+ && python3-config --help \
+ && python3.12-config --help \
+ && pip list --verbose
+
+# ############################################################################
+
+# Adding labels for external usage
+LABEL python.version_310=$TSN_ASDF_PYTHON_VERSION_310
+LABEL python.version_312=$TSN_ASDF_PYTHON_VERSION_312
+LABEL python.version_313=$TSN_ASDF_PYTHON_VERSION_313
+
+# ############################################################################
+#
+#   ARMv7 32-bit architecture maintenance for                       /||)|\/|
+#   Python runtime environments                                    /-||\|  |
+#
+# ############################################################################
+
+FROM python-all AS python-arm
+
+# Define Python versions to be installed via ASDF
+ENV TSN_ASDF_PYTHON_VERSION_312=3.12.7
+ENV TSN_ASDF_PYTHON_VERSION=$TSN_ASDF_PYTHON_VERSION_312
+
+### NOT YET ### # Define CPython default optimization for compilations (PGO and LTO active)
+### NOT YET ### ENV PYTHON_CONFIGURE_OPTS="$PYTHON_CONFIGURE_OPTS --enable-optimizations"
+### NOT YET ### ENV PYTHON_CONFIGURE_OPTS="$PYTHON_CONFIGURE_OPTS --with-lto"
+
+# ############################################################################
+
+# Install Python versions and set default version
+RUN echo "pip==$TSN_ASDF_PYPI_PIP_VERSION" \
+ >> $WSUSER_HOME/.default-python-packages \
+ && echo "setuptools==$TSN_ASDF_PYPI_SETUPTOOLS_VERSION" \
+ >> $WSUSER_HOME/.default-python-packages \
+ && echo "virtualenv==$TSN_ASDF_PYPI_VIRTUALENV_VERSION" \
+ >> $WSUSER_HOME/.default-python-packages \
+ && echo "wheel==$TSN_ASDF_PYPI_WHEEL_VERSION" \
+ >> $WSUSER_HOME/.default-python-packages \
+ && echo "poetry==$TSN_ASDF_PYPI_POETRY_VERSION" \
+ >> $WSUSER_HOME/.default-python-packages \
+ && echo "west==$TSN_ASDF_PYPI_WEST_VERSION" \
+ >> $WSUSER_HOME/.default-python-packages \
+    \
+ && asdf install python $TSN_ASDF_PYTHON_VERSION \
+ && asdf global  python $TSN_ASDF_PYTHON_VERSION \
+ && asdf reshim  python \
+    \
+ && asdf local   python $TSN_ASDF_PYTHON_VERSION \
+ && asdf list    python \
+    \
+ && pip --version \
+ && pip3 --version \
+ && pip3.12 --version \
+ && python --version \
+ && python3 --version \
+ && python3.12 --version \
+ && python-config --help \
+ && python3-config --help \
+ && python3.12-config --help \
+ && pip list --verbose
+
+# ############################################################################
+
+# Adding labels for external usage
+LABEL python.version_312=$TSN_ASDF_PYTHON_VERSION_312
+
+# ############################################################################
+#
+#   ARMv8 64-bit architecture maintenance for                /||)|\/| / /|
+#   Python runtime environments                             /-||\|  |(_)~|~
+#
+# ############################################################################
+
+FROM python-all AS python-arm64
+
+# Define Python versions to be installed via ASDF
+ENV TSN_ASDF_PYTHON_VERSION_310=3.10.15
+ENV TSN_ASDF_PYTHON_VERSION_312=3.12.7
+ENV TSN_ASDF_PYTHON_VERSION_313=3.13.0
+ENV TSN_ASDF_PYTHON_VERSION=$TSN_ASDF_PYTHON_VERSION_312
+
+### NOT YET ### # Define CPython default optimization for compilations (PGO and LTO active)
+### NOT YET ### ENV PYTHON_CONFIGURE_OPTS="$PYTHON_CONFIGURE_OPTS --enable-optimizations"
+### NOT YET ### ENV PYTHON_CONFIGURE_OPTS="$PYTHON_CONFIGURE_OPTS --with-lto"
+
+# ############################################################################
+
+# Install Python versions and set default version
+RUN echo "pip==$TSN_ASDF_PYPI_PIP_VERSION" \
+ >> $WSUSER_HOME/.default-python-packages \
+ && echo "setuptools==$TSN_ASDF_PYPI_SETUPTOOLS_VERSION" \
+ >> $WSUSER_HOME/.default-python-packages \
+ && echo "virtualenv==$TSN_ASDF_PYPI_VIRTUALENV_VERSION" \
+ >> $WSUSER_HOME/.default-python-packages \
+ && echo "wheel==$TSN_ASDF_PYPI_WHEEL_VERSION" \
+ >> $WSUSER_HOME/.default-python-packages \
+ && echo "poetry==$TSN_ASDF_PYPI_POETRY_VERSION" \
+ >> $WSUSER_HOME/.default-python-packages \
+ && echo "west==$TSN_ASDF_PYPI_WEST_VERSION" \
+ >> $WSUSER_HOME/.default-python-packages \
+    \
+ && asdf install python $TSN_ASDF_PYTHON_VERSION_310 \
+ && asdf global  python $TSN_ASDF_PYTHON_VERSION_310 \
+ && asdf reshim  python \
+    \
+ && asdf install python $TSN_ASDF_PYTHON_VERSION_312 \
+ && asdf global  python $TSN_ASDF_PYTHON_VERSION_312 \
+ && asdf reshim  python \
+    \
+ && asdf install python $TSN_ASDF_PYTHON_VERSION_313 \
+ && asdf global  python $TSN_ASDF_PYTHON_VERSION_313 \
+ && asdf reshim  python \
+    \
+ && asdf local   python $TSN_ASDF_PYTHON_VERSION \
+ && asdf list    python \
+    \
+ && pip --version \
+ && pip3 --version \
+ && pip3.12 --version \
+ && python --version \
+ && python3 --version \
+ && python3.12 --version \
+ && python-config --help \
+ && python3-config --help \
+ && python3.12-config --help \
+ && pip list --verbose
+
+# ############################################################################
+
+# Adding labels for external usage
+LABEL python.version_310=$TSN_ASDF_PYTHON_VERSION_310
+LABEL python.version_312=$TSN_ASDF_PYTHON_VERSION_312
+LABEL python.version_313=$TSN_ASDF_PYTHON_VERSION_313
+
+# ############################################################################
+#
+#   RISC-V 64-bit architecture maintenance for               |)|(`/`| // /|
+#   Python runtime environments                              |\|_)\,|/(_)~|~
+#
+# ############################################################################
+
+FROM python-all AS python-riscv64
+
+# Define Python versions to be installed via ASDF
+ENV TSN_ASDF_PYTHON_VERSION_312=3.12.7
+ENV TSN_ASDF_PYTHON_VERSION=$TSN_ASDF_PYTHON_VERSION_312
+
+### NOT YET ### # Define CPython default optimization for compilations (PGO and LTO active)
+### NOT YET ### ENV PYTHON_CONFIGURE_OPTS="$PYTHON_CONFIGURE_OPTS --enable-optimizations"
+### NOT YET ### ENV PYTHON_CONFIGURE_OPTS="$PYTHON_CONFIGURE_OPTS --with-lto"
+
+# ############################################################################
+
+# Install Python versions and set default version
+RUN echo "pip==$TSN_ASDF_PYPI_PIP_VERSION" \
+ >> $WSUSER_HOME/.default-python-packages \
+ && echo "setuptools==$TSN_ASDF_PYPI_SETUPTOOLS_VERSION" \
+ >> $WSUSER_HOME/.default-python-packages \
+ && echo "virtualenv==$TSN_ASDF_PYPI_VIRTUALENV_VERSION" \
+ >> $WSUSER_HOME/.default-python-packages \
+ && echo "wheel==$TSN_ASDF_PYPI_WHEEL_VERSION" \
+ >> $WSUSER_HOME/.default-python-packages \
+ && echo "poetry==$TSN_ASDF_PYPI_POETRY_VERSION" \
+ >> $WSUSER_HOME/.default-python-packages \
+ && echo "west==$TSN_ASDF_PYPI_WEST_VERSION" \
+ >> $WSUSER_HOME/.default-python-packages \
+    \
+ && asdf install python $TSN_ASDF_PYTHON_VERSION \
+ && asdf global  python $TSN_ASDF_PYTHON_VERSION \
+ && asdf reshim  python \
+    \
+ && asdf local   python $TSN_ASDF_PYTHON_VERSION \
+ && asdf list    python \
+    \
+ && pip --version \
+ && pip3 --version \
+ && pip3.12 --version \
+ && python --version \
+ && python3 --version \
+ && python3.12 --version \
+ && python-config --help \
+ && python3-config --help \
+ && python3.12-config --help \
+ && pip list --verbose
+
+# ############################################################################
+
+# Adding labels for external usage
+LABEL python.version_312=$TSN_ASDF_PYTHON_VERSION_312
+
+# ############################################################################
+#
+#   IBM POWER8 architecture maintenance for                 |)|)/` / /| | [~
+#   Python runtime environments                             | | \,(_)~|~|_[_
+#
+# ############################################################################
+
+FROM python-all AS python-ppc64le
+
+# Define Python versions to be installed via ASDF
+ENV TSN_ASDF_PYTHON_VERSION_312=3.12.7
+ENV TSN_ASDF_PYTHON_VERSION=$TSN_ASDF_PYTHON_VERSION_312
+
+### NOT YET ### # Define CPython default optimization for compilations (PGO and LTO active)
+### NOT YET ### ENV PYTHON_CONFIGURE_OPTS="$PYTHON_CONFIGURE_OPTS --enable-optimizations"
+### NOT YET ### ENV PYTHON_CONFIGURE_OPTS="$PYTHON_CONFIGURE_OPTS --with-lto"
+
+# ############################################################################
+
+# Install Python versions and set default version
+RUN echo "pip==$TSN_ASDF_PYPI_PIP_VERSION" \
+ >> $WSUSER_HOME/.default-python-packages \
+ && echo "setuptools==$TSN_ASDF_PYPI_SETUPTOOLS_VERSION" \
+ >> $WSUSER_HOME/.default-python-packages \
+ && echo "virtualenv==$TSN_ASDF_PYPI_VIRTUALENV_VERSION" \
+ >> $WSUSER_HOME/.default-python-packages \
+ && echo "wheel==$TSN_ASDF_PYPI_WHEEL_VERSION" \
+ >> $WSUSER_HOME/.default-python-packages \
+ && echo "poetry==$TSN_ASDF_PYPI_POETRY_VERSION" \
+ >> $WSUSER_HOME/.default-python-packages \
+ && echo "west==$TSN_ASDF_PYPI_WEST_VERSION" \
+ >> $WSUSER_HOME/.default-python-packages \
+    \
+ && asdf install python $TSN_ASDF_PYTHON_VERSION \
+ && asdf global  python $TSN_ASDF_PYTHON_VERSION \
+ && asdf reshim  python \
+    \
+ && asdf local   python $TSN_ASDF_PYTHON_VERSION \
+ && asdf list    python \
+    \
+ && pip --version \
+ && pip3 --version \
+ && pip3.12 --version \
+ && python --version \
+ && python3 --version \
+ && python3.12 --version \
+ && python-config --help \
+ && python3-config --help \
+ && python3.12-config --help \
+ && pip list --verbose
+
+# ############################################################################
+
+# Adding labels for external usage
+LABEL python.version_312=$TSN_ASDF_PYTHON_VERSION_312
+
+# ############################################################################
+#
+#   IBM z-Systems architecture maintenance for                   (`')(~)/\\/
+#   Python runtime environments                                  _).) / \//\
+#
+# ############################################################################
+
+FROM python-all AS python-s390x
+
+# Define Python versions to be installed via ASDF
+ENV TSN_ASDF_PYTHON_VERSION_312=3.12.7
+ENV TSN_ASDF_PYTHON_VERSION=$TSN_ASDF_PYTHON_VERSION_312
+
+### NOT YET ### # Define CPython default optimization for compilations (PGO and LTO active)
+### NOT YET ### ENV PYTHON_CONFIGURE_OPTS="$PYTHON_CONFIGURE_OPTS --enable-optimizations"
+### NOT YET ### ENV PYTHON_CONFIGURE_OPTS="$PYTHON_CONFIGURE_OPTS --with-lto"
+
+# ############################################################################
+
+# Install Python versions and set default version
+RUN echo "pip==$TSN_ASDF_PYPI_PIP_VERSION" \
+ >> $WSUSER_HOME/.default-python-packages \
+ && echo "setuptools==$TSN_ASDF_PYPI_SETUPTOOLS_VERSION" \
+ >> $WSUSER_HOME/.default-python-packages \
+ && echo "virtualenv==$TSN_ASDF_PYPI_VIRTUALENV_VERSION" \
+ >> $WSUSER_HOME/.default-python-packages \
+ && echo "wheel==$TSN_ASDF_PYPI_WHEEL_VERSION" \
+ >> $WSUSER_HOME/.default-python-packages \
+ && echo "poetry==$TSN_ASDF_PYPI_POETRY_VERSION" \
+ >> $WSUSER_HOME/.default-python-packages \
+ && echo "west==$TSN_ASDF_PYPI_WEST_VERSION" \
+ >> $WSUSER_HOME/.default-python-packages \
+    \
+ && asdf install python $TSN_ASDF_PYTHON_VERSION \
+ && asdf global  python $TSN_ASDF_PYTHON_VERSION \
+ && asdf reshim  python \
+    \
+ && asdf local   python $TSN_ASDF_PYTHON_VERSION \
+ && asdf list    python \
+    \
+ && pip --version \
+ && pip3 --version \
+ && pip3.12 --version \
+ && python --version \
+ && python3 --version \
+ && python3.12 --version \
+ && python-config --help \
+ && python3-config --help \
+ && python3.12-config --help \
+ && pip list --verbose
+
+# ############################################################################
+
+# Adding labels for external usage
+LABEL python.version_312=$TSN_ASDF_PYTHON_VERSION_312
+
+# ############################################################################
+#                                                                  ┏┓┳┳┓┏┓┓
+#   Final maintenance for Python runtime environments              ┣ ┃┃┃┣┫┃
+#                                                                  ┻ ┻┛┗┛┗┗┛
+# ############################################################################
+
+FROM python-${TARGETARCH} AS python
+
+# ############################################################################
+
+# Adding labels for external usage
+LABEL python.version=$TSN_ASDF_PYTHON_VERSION
+LABEL python.pip.version=$TSN_ASDF_PYPI_PIP_VERSION
+LABEL python.setuptools.version=$TSN_ASDF_PYPI_SETUPTOOLS_VERSION
+LABEL python.virtualenv.version=$TSN_ASDF_PYPI_VIRTUALENV_VERSION
+LABEL python.wheel.version=$TSN_ASDF_PYPI_WHEEL_VERSION
+LABEL python.poetry.version=$TSN_ASDF_PYPI_POETRY_VERSION
+LABEL python.west.version=$TSN_ASDF_PYPI_WEST_VERSION

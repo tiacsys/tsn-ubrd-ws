@@ -164,8 +164,25 @@ Multiple runtime environments
    "x", "**3.30.5**",   "| ``TSN_ASDF_CMAKE_VERSION``
                          | ``TSN_ASDF_CMAKE_VERSION_330``",   "x", "x", "x", "x", "x", "x"
    " ", "*3.20.6*",     "| ``TSN_ASDF_CMAKE_VERSION_320``",   "x", "x", "x", "x", "x", "x"
+   " ", "|Python|_:",   "|",                                  " ", " ", " ", " ", " ", " "
+   " ", "*3.13.0*",     "| ``TSN_ASDF_PYTHON_VERSION_313``",  "x", " ", "x", " ", " ", " "
+   "x", "**3.12.7**",   "| ``TSN_ASDF_PYTHON_VERSION``
+                         | ``TSN_ASDF_PYTHON_VERSION_312``",  "x", "x", "x", "x", "x", "x"
+   " ", "*3.10.15*",    "| ``TSN_ASDF_PYTHON_VERSION_310``",  "x", " ", "x", " ", " ", " "
 
 .. [*] Default version (bold).
+
+.. csv-table:: Python 3 packages from `PyPI`_ based on `Pip`_
+   :header: "Package", "Shell Variable", "``amd64``", "``arm/v7``", "``arm64/v8``", "``riscv64``", "``ppc64le``", "``s390x``"
+   :widths: 20 50 5 5 5 5 5 5
+   :stub-columns: 1
+
+   "``pip==24.3.1``",          "``TSN_ASDF_PYPI_PIP_VERSION``",        "x", "x", "x", "x", "x", "x"
+   "``setuptools==75.3.0``",   "``TSN_ASDF_PYPI_SETUPTOOLS_VERSION``", "x", "x", "x", "x", "x", "x"
+   "``virtualenv==20.27.1``",  "``TSN_ASDF_PYPI_VIRTUALENV_VERSION``", "x", "x", "x", "x", "x", "x"
+   "``wheel==0.44.0``",        "``TSN_ASDF_PYPI_WHEEL_VERSION``",      "x", "x", "x", "x", "x", "x"
+   "``poetry==1.8.4``",        "``TSN_ASDF_PYPI_POETRY_VERSION``",     "x", "x", "x", "x", "x", "x"
+   "``west==1.3.0``",          "``TSN_ASDF_PYPI_WEST_VERSION``",       "x", "x", "x", "x", "x", "x"
 
 .. rubric:: `Ninja`_ extra requirements for `ASDF`_
 

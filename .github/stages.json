@@ -3,6 +3,7 @@
 		{ "stage": "base" },
 		{ "stage": "cmake" },
 		{ "stage": "ninja" },
+		{ "stage": "python" },
 		{ "stage": "push", "ghr-free-disk": false }
 	]
 }
