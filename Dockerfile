@@ -1369,3 +1369,295 @@ FROM golang-${TARGETARCH} AS golang
 
 # Adding labels for external usage
 LABEL golang.version=$TSN_ASDF_GOLANG_VERSION
+
+
+#  -- about 10 minutes
+#  ____________________________________________________
+#      _     _
+#      /|   /                /                  ,
+#  ---/-| -/------__-----__-/-----__----------------__-
+#    /  | /     /   )  /   /    /___)         /    (_ `
+#  _/___|/_____(___/__(___/____(___ __o______/____(__)_
+#                                           /
+#                                       (_ /
+
+# ############################################################################
+#                                                                     ┏┓┓ ┓
+#   All architectures maintenance for Node.js runtime environments    ┣┫┃ ┃
+#                                                                     ┛┗┗┛┗┛
+# ############################################################################
+
+FROM golang AS nodejs-all
+
+#
+# Node.js runtime versions
+# https://nodejs.org/en/about/previous-releases
+# https://nodejs.org/download/release
+# https://github.com/asdf-vm/asdf-nodejs
+# https://github.com/asdf-vm/asdf-nodejs/commits
+#
+
+# ############################################################################
+#
+#   AMD/x86 64-bit architecture maintenance for               /||\/||\ / /|
+#   Node.js runtime environments                             /-||  ||/(_)~|~
+#
+# ############################################################################
+
+FROM nodejs-all AS nodejs-amd64
+
+# Define Node.js versions to be installed via ASDF
+ENV TSN_ASDF_NODEJS_VERSION_18=18.20.4
+ENV TSN_ASDF_NODEJS_VERSION_20=20.18.0
+ENV TSN_ASDF_NODEJS_VERSION_22=22.10.0
+ENV TSN_ASDF_NODEJS_VERSION=$TSN_ASDF_NODEJS_VERSION_20
+
+# ############################################################################
+
+# Install Node.js versions and set default version
+RUN ASDF_NODEJS_VERBOSE_INSTALL=yes \
+    asdf install nodejs $TSN_ASDF_NODEJS_VERSION_18 \
+ && asdf global  nodejs $TSN_ASDF_NODEJS_VERSION_18 \
+ && asdf reshim  nodejs \
+    \
+ && ASDF_NODEJS_VERBOSE_INSTALL=yes \
+    asdf install nodejs $TSN_ASDF_NODEJS_VERSION_20 \
+ && asdf global  nodejs $TSN_ASDF_NODEJS_VERSION_20 \
+ && asdf reshim  nodejs \
+    \
+ && ASDF_NODEJS_VERBOSE_INSTALL=yes \
+    asdf install nodejs $TSN_ASDF_NODEJS_VERSION_22 \
+ && asdf global  nodejs $TSN_ASDF_NODEJS_VERSION_22 \
+ && asdf reshim  nodejs \
+    \
+ && asdf local   nodejs $TSN_ASDF_NODEJS_VERSION \
+ && asdf list    nodejs \
+    \
+ && npm --version \
+ && npx --version \
+ && node --version \
+ && npm list --global \
+ && corepack --version
+
+# ############################################################################
+
+# Adding labels for external usage
+LABEL nodejs.version_18=$TSN_ASDF_NODEJS_VERSION_18
+LABEL nodejs.version_20=$TSN_ASDF_NODEJS_VERSION_20
+LABEL nodejs.version_22=$TSN_ASDF_NODEJS_VERSION_22
+
+# ############################################################################
+#
+#   ARMv7 32-bit architecture maintenance for                       /||)|\/|
+#   Node.js runtime environments                                   /-||\|  |
+#
+# ############################################################################
+
+FROM nodejs-all AS nodejs-arm
+
+# Define Node.js versions to be installed via ASDF
+ENV TSN_ASDF_NODEJS_VERSION_20=20.18.0
+ENV TSN_ASDF_NODEJS_VERSION=$TSN_ASDF_NODEJS_VERSION_20
+
+# ############################################################################
+
+# Install Node.js versions and set default version
+RUN ASDF_NODEJS_VERBOSE_INSTALL=yes \
+    asdf install nodejs $TSN_ASDF_NODEJS_VERSION \
+ && asdf global  nodejs $TSN_ASDF_NODEJS_VERSION \
+ && asdf reshim  nodejs \
+    \
+ && asdf local   nodejs $TSN_ASDF_NODEJS_VERSION \
+ && asdf list    nodejs \
+    \
+ && npm --version \
+ && npx --version \
+ && node --version \
+ && npm list --global \
+ && corepack --version
+
+# ############################################################################
+
+# Adding labels for external usage
+LABEL nodejs.version_20=$TSN_ASDF_NODEJS_VERSION_20
+
+# ############################################################################
+#
+#   ARMv8 64-bit architecture maintenance for                 /||)|\/| / /|
+#   Node.js runtime environments                             /-||\|  |(_)~|~
+#
+# ############################################################################
+
+FROM nodejs-all AS nodejs-arm64
+
+# Define Node.js versions to be installed via ASDF
+ENV TSN_ASDF_NODEJS_VERSION_18=18.20.4
+ENV TSN_ASDF_NODEJS_VERSION_20=20.18.0
+ENV TSN_ASDF_NODEJS_VERSION_22=22.10.0
+ENV TSN_ASDF_NODEJS_VERSION=$TSN_ASDF_NODEJS_VERSION_20
+
+# ############################################################################
+
+# Install Node.js versions and set default version
+RUN ASDF_NODEJS_VERBOSE_INSTALL=yes \
+    asdf install nodejs $TSN_ASDF_NODEJS_VERSION_18 \
+ && asdf global  nodejs $TSN_ASDF_NODEJS_VERSION_18 \
+ && asdf reshim  nodejs \
+    \
+ && ASDF_NODEJS_VERBOSE_INSTALL=yes \
+    asdf install nodejs $TSN_ASDF_NODEJS_VERSION_20 \
+ && asdf global  nodejs $TSN_ASDF_NODEJS_VERSION_20 \
+ && asdf reshim  nodejs \
+    \
+ && ASDF_NODEJS_VERBOSE_INSTALL=yes \
+    asdf install nodejs $TSN_ASDF_NODEJS_VERSION_22 \
+ && asdf global  nodejs $TSN_ASDF_NODEJS_VERSION_22 \
+ && asdf reshim  nodejs \
+    \
+ && asdf local   nodejs $TSN_ASDF_NODEJS_VERSION \
+ && asdf list    nodejs \
+    \
+ && npm --version \
+ && npx --version \
+ && node --version \
+ && npm list --global \
+ && corepack --version
+
+# ############################################################################
+
+# Adding labels for external usage
+LABEL nodejs.version_18=$TSN_ASDF_NODEJS_VERSION_18
+LABEL nodejs.version_20=$TSN_ASDF_NODEJS_VERSION_20
+LABEL nodejs.version_22=$TSN_ASDF_NODEJS_VERSION_22
+
+# ############################################################################
+#
+#   RISC-V 64-bit architecture maintenance for               |)|(`/`| // /|
+#   Node.js runtime environments                             |\|_)\,|/(_)~|~
+#
+#   -- not supported by Node.js cross compiling, fall back to system package
+#
+# ############################################################################
+
+FROM nodejs-all AS nodejs-riscv64
+
+# Define Node.js versions to be installed via ASDF
+ENV TSN_ASDF_NODEJS_VERSION_18=18.19.1
+ENV TSN_ASDF_NODEJS_VERSION=$TSN_ASDF_NODEJS_VERSION_18
+
+# ############################################################################
+
+# switch to superuser
+USER root
+WORKDIR /
+
+# ############################################################################
+
+# Install requirements
+RUN apt-get --assume-yes update \
+ && apt-get --assume-yes install --no-install-recommends \
+    nodejs \
+    npm \
+ && apt-get --assume-yes autoremove --purge \
+ && apt-get clean \
+ && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
+    \
+ && npm install --global corepack \
+    \
+ && npm --version \
+ && npx --version \
+ && node --version \
+ && npm list --global \
+ && corepack --version
+
+# ############################################################################
+
+# switch to workspace user
+USER $WSUSER_NAME
+WORKDIR $WSUSER_HOME
+
+# ############################################################################
+
+# Adding labels for external usage
+LABEL nodejs.version_18=$TSN_ASDF_NODEJS_VERSION_18
+
+# ############################################################################
+#
+#   IBM POWER8 architecture maintenance for                 |)|)/` / /| | [~
+#   Node.js runtime environments                            | | \,(_)~|~|_[_
+#
+# ############################################################################
+
+FROM nodejs-all AS nodejs-ppc64le
+
+# Define Node.js versions to be installed via ASDF
+ENV TSN_ASDF_NODEJS_VERSION_20=20.18.0
+ENV TSN_ASDF_NODEJS_VERSION=$TSN_ASDF_NODEJS_VERSION_20
+
+# ############################################################################
+
+# Install Node.js versions and set default version
+RUN ASDF_NODEJS_VERBOSE_INSTALL=yes \
+    asdf install nodejs $TSN_ASDF_NODEJS_VERSION \
+ && asdf global  nodejs $TSN_ASDF_NODEJS_VERSION \
+ && asdf reshim  nodejs \
+    \
+ && asdf local   nodejs $TSN_ASDF_NODEJS_VERSION \
+ && asdf list    nodejs \
+    \
+ && npm --version \
+ && npx --version \
+ && node --version \
+ && npm list --global \
+ && corepack --version
+
+# ############################################################################
+
+# Adding labels for external usage
+LABEL nodejs.version_20=$TSN_ASDF_NODEJS_VERSION_20
+
+# ############################################################################
+#
+#   IBM z-Systems architecture maintenance for                   (`')(~)/\\/
+#   Node.js runtime environments                                 _).) / \//\
+#
+# ############################################################################
+
+FROM nodejs-all AS nodejs-s390x
+
+# Define Node.js versions to be installed via ASDF
+ENV TSN_ASDF_NODEJS_VERSION_20=20.18.0
+ENV TSN_ASDF_NODEJS_VERSION=$TSN_ASDF_NODEJS_VERSION_20
+
+# ############################################################################
+
+# Install Node.js versions and set default version
+RUN ASDF_NODEJS_VERBOSE_INSTALL=yes \
+    asdf install nodejs $TSN_ASDF_NODEJS_VERSION \
+ && asdf global  nodejs $TSN_ASDF_NODEJS_VERSION \
+ && asdf reshim  nodejs \
+    \
+ && asdf local   nodejs $TSN_ASDF_NODEJS_VERSION \
+ && asdf list    nodejs \
+    \
+ && npm --version \
+ && npx --version \
+ && node --version \
+ && npm list --global \
+ && corepack --version
+
+# ############################################################################
+
+# Adding labels for external usage
+LABEL nodejs.version_20=$TSN_ASDF_NODEJS_VERSION_20
+
+# ############################################################################
+#                                                                  ┏┓┳┳┓┏┓┓
+#   Final maintenance for Node.js runtime environments             ┣ ┃┃┃┣┫┃
+#                                                                  ┻ ┻┛┗┛┗┗┛
+# ############################################################################
+
+FROM nodejs-${TARGETARCH} AS nodejs
+
+# Adding labels for external usage
+LABEL nodejs.version=$TSN_ASDF_NODEJS_VERSION

@@ -178,6 +178,13 @@ Multiple runtime environments
    " ", "*1.21.13*",    "| ``TSN_ASDF_GOLANG_VERSION_2023``", "x", " ", "x", " ", " ", " "
    " ", "*1.21.9*",     "| ``TSN_ASDF_GOLANG_VERSION_2023``", " ", " ", " ", " ", " ", "#"
    " ", "*1.19.13*",    "| ``TSN_ASDF_GOLANG_VERSION_2022``", "x", " ", "x", " ", " ", " "
+   " ", "|Node.js|_:",  "|",                                  " ", " ", " ", " ", " ", " "
+   " ", "*22.10.0*",    "| ``TSN_ASDF_NODEJS_VERSION_22``",   "x", " ", "x", " ", " ", " "
+   "x", "**20.18.0**",  "| ``TSN_ASDF_NODEJS_VERSION``
+                         | ``TSN_ASDF_NODEJS_VERSION_20``",   "x", "x", "x", " ", "x", "x"
+   " ", "*18.20.4*",    "| ``TSN_ASDF_NODEJS_VERSION_18``",   "x", " ", "x", " ", " ", " "
+   "x", "**18.19.1**",  "| ``TSN_ASDF_NODEJS_VERSION``
+                         | ``TSN_ASDF_NODEJS_VERSION_18``",   " ", " ", " ", "#", " ", " "
 
 .. [*] Default version (bold).
 
