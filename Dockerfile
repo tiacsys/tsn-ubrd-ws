@@ -1738,3 +1738,370 @@ FROM nodejs-${TARGETARCH} AS nodejs
 
 # Adding labels for external usage
 LABEL nodejs.version=$TSN_ASDF_NODEJS_VERSION
+
+
+#  -- about 3 hours
+#  ________________________________
+#      ____
+#      /    )            /
+#  ---/___ /------------/__--------
+#    /    |    /   /   /   )  /   /
+#  _/_____|___(___(___(___/__(___/_
+#                               /
+#                           (_ /
+
+# ############################################################################
+#                                                                     ┏┓┓ ┓
+#   All architectures maintenance for Ruby runtime environments       ┣┫┃ ┃
+#                                                                     ┛┗┗┛┗┛
+# ############################################################################
+
+FROM nodejs AS ruby-all
+
+#
+# Ruby runtime versions
+# https://www.ruby-lang.org/en/downloads/branches
+# https://www.ruby-lang.org/en/downloads/releases
+# https://github.com/asdf-vm/asdf-ruby
+# https://github.com/asdf-vm/asdf-ruby/commits
+#
+
+# Define Ruby default behaviour for compilations (no documentation)
+# ENV RUBY_BUILD_OPTS="--verbose"
+ENV RUBY_CONFIGURE_OPTS="--with-mantype=doc"
+ENV RUBY_CONFIGURE_OPTS="$RUBY_CONFIGURE_OPTS --disable-install-doc"
+ENV RUBY_CONFIGURE_OPTS="$RUBY_CONFIGURE_OPTS --disable-install-rdoc"
+ENV RUBY_CONFIGURE_OPTS="$RUBY_CONFIGURE_OPTS --disable-install-capi"
+
+# Define Ruby default behaviour for compilations (JIT compiler with Ruby)
+# - https://docs.ruby-lang.org/en/master/rjit/rjit_md.html
+ENV RUBY_CONFIGURE_OPTS="$RUBY_CONFIGURE_OPTS --enable-rjit"
+
+# ############################################################################
+#
+#   AMD/x86 64-bit architecture maintenance for               /||\/||\ / /|
+#   Ruby runtime environments                                /-||  ||/(_)~|~
+#
+# ############################################################################
+
+FROM ruby-all AS ruby-amd64
+
+# Define Ruby versions to be installed via ASDF
+ENV TSN_ASDF_RUBY_VERSION_31=3.1.6
+ENV TSN_ASDF_RUBY_VERSION_32=3.2.5
+ENV TSN_ASDF_RUBY_VERSION_33=3.3.5
+ENV TSN_ASDF_RUBY_VERSION=$TSN_ASDF_RUBY_VERSION_33
+
+# Define Ruby default behaviour for compilations (JIT compiler with Rust)
+# - https://docs.ruby-lang.org/en/master/yjit/yjit_md.html
+ENV RUBY_CONFIGURE_OPTS="$RUBY_CONFIGURE_OPTS --enable-yjit"
+
+# ############################################################################
+
+# Install Ruby versions and set default version
+RUN asdf install ruby $TSN_ASDF_RUBY_VERSION_31 \
+ && asdf global  ruby $TSN_ASDF_RUBY_VERSION_31 \
+ && asdf reshim  ruby \
+    \
+ && asdf install ruby $TSN_ASDF_RUBY_VERSION_32 \
+ && asdf global  ruby $TSN_ASDF_RUBY_VERSION_32 \
+ && asdf reshim  ruby \
+    \
+ && asdf install ruby $TSN_ASDF_RUBY_VERSION_33 \
+ && asdf global  ruby $TSN_ASDF_RUBY_VERSION_33 \
+ && asdf reshim  ruby \
+    \
+ && asdf local   ruby $TSN_ASDF_RUBY_VERSION \
+ && asdf list    ruby \
+    \
+ && bundle --version \
+ && bundler --version \
+ && erb --version \
+ && irb --version \
+ && racc --version \
+ && rake --version \
+ && rbs --version \
+ && rdbg --version \
+ && rdoc --version \
+ && ri --version \
+ && ruby --version \
+ && gem --version \
+ && gem list
+
+# ############################################################################
+
+# Adding labels for external usage
+LABEL ruby.version_31=$TSN_ASDF_RUBY_VERSION_31
+LABEL ruby.version_32=$TSN_ASDF_RUBY_VERSION_32
+LABEL ruby.version_33=$TSN_ASDF_RUBY_VERSION_33
+
+# ############################################################################
+#
+#   ARMv7 32-bit architecture maintenance for                       /||)|\/|
+#   Ruby runtime environments                                      /-||\|  |
+#
+#   -- not supported by Ruby cross compiling, fall back to system package
+#
+# ############################################################################
+
+FROM ruby-all AS ruby-arm
+
+# Define Ruby versions to be installed via ASDF
+ENV TSN_ASDF_RUBY_VERSION_32=3.2.3
+ENV TSN_ASDF_RUBY_VERSION=$TSN_ASDF_RUBY_VERSION_32
+
+# ############################################################################
+
+# switch to superuser
+USER root
+WORKDIR /
+
+# ############################################################################
+
+# Install requirements
+RUN apt-get --assume-yes update \
+ && apt-get --assume-yes install --no-install-recommends \
+    racc \
+    ruby-bundler \
+    ruby-rubygems \
+    ruby-full \
+ && apt-get --assume-yes autoremove --purge \
+ && apt-get clean \
+ && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
+    \
+ && bundle --version \
+ && bundler --version \
+ && erb --version \
+ && irb --version \
+ && racc --version \
+ && rake --version \
+ && rbs3.2 --version \
+ && rdbg3.2 --version \
+ && rdoc --version \
+ && ri --version \
+ && ruby --version \
+ && gem --version \
+ && gem list
+
+# ############################################################################
+
+# switch to workspace user
+USER $WSUSER_NAME
+WORKDIR $WSUSER_HOME
+
+# ############################################################################
+
+# Adding labels for external usage
+LABEL ruby.version_32=$TSN_ASDF_RUBY_VERSION_32
+
+# ############################################################################
+#
+#   ARMv8 64-bit architecture maintenance for                 /||)|\/| / /|
+#   Ruby runtime environments                                /-||\|  |(_)~|~
+#
+# ############################################################################
+
+FROM ruby-all AS ruby-arm64
+
+# Define Ruby versions to be installed via ASDF
+ENV TSN_ASDF_RUBY_VERSION_31=3.1.6
+ENV TSN_ASDF_RUBY_VERSION_32=3.2.5
+ENV TSN_ASDF_RUBY_VERSION_33=3.3.5
+ENV TSN_ASDF_RUBY_VERSION=$TSN_ASDF_RUBY_VERSION_33
+
+# Define Ruby default behaviour for compilations (JIT compiler with Rust)
+# - https://docs.ruby-lang.org/en/master/yjit/yjit_md.html
+ENV RUBY_CONFIGURE_OPTS="$RUBY_CONFIGURE_OPTS --enable-yjit"
+
+# ############################################################################
+
+# Install Ruby versions and set default version
+RUN asdf install ruby $TSN_ASDF_RUBY_VERSION_31 \
+ && asdf global  ruby $TSN_ASDF_RUBY_VERSION_31 \
+ && asdf reshim  ruby \
+    \
+ && asdf install ruby $TSN_ASDF_RUBY_VERSION_32 \
+ && asdf global  ruby $TSN_ASDF_RUBY_VERSION_32 \
+ && asdf reshim  ruby \
+    \
+ && asdf install ruby $TSN_ASDF_RUBY_VERSION_33 \
+ && asdf global  ruby $TSN_ASDF_RUBY_VERSION_33 \
+ && asdf reshim  ruby \
+    \
+ && asdf local   ruby $TSN_ASDF_RUBY_VERSION \
+ && asdf list    ruby \
+    \
+ && bundle --version \
+ && bundler --version \
+ && erb --version \
+ && irb --version \
+ && racc --version \
+ && rake --version \
+ && rbs --version \
+ && rdbg --version \
+ && rdoc --version \
+ && ri --version \
+ && ruby --version \
+ && gem --version \
+ && gem list
+
+# ############################################################################
+
+# Adding labels for external usage
+LABEL ruby.version_31=$TSN_ASDF_RUBY_VERSION_31
+LABEL ruby.version_32=$TSN_ASDF_RUBY_VERSION_32
+LABEL ruby.version_33=$TSN_ASDF_RUBY_VERSION_33
+
+# ############################################################################
+#
+#   RISC-V 64-bit architecture maintenance for               |)|(`/`| // /|
+#   Ruby runtime environments                                |\|_)\,|/(_)~|~
+#
+#   -- not supported by Ruby cross compiling, fall back to system package
+#
+# ############################################################################
+
+FROM ruby-all AS ruby-riscv64
+
+# Define Ruby versions to be installed via ASDF
+ENV TSN_ASDF_RUBY_VERSION_32=3.2.3
+ENV TSN_ASDF_RUBY_VERSION=$TSN_ASDF_RUBY_VERSION_32
+
+# ############################################################################
+
+# switch to superuser
+USER root
+WORKDIR /
+
+# ############################################################################
+
+# Install requirements
+RUN apt-get --assume-yes update \
+ && apt-get --assume-yes install --no-install-recommends \
+    racc \
+    ruby-bundler \
+    ruby-rubygems \
+    ruby-full \
+ && apt-get --assume-yes autoremove --purge \
+ && apt-get clean \
+ && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
+    \
+ && bundle --version \
+ && bundler --version \
+ && erb --version \
+ && irb --version \
+ && racc --version \
+ && rake --version \
+ && rbs3.2 --version \
+ && rdbg3.2 --version \
+ && rdoc --version \
+ && ri --version \
+ && ruby --version \
+ && gem --version \
+ && gem list
+
+# ############################################################################
+
+# switch to workspace user
+USER $WSUSER_NAME
+WORKDIR $WSUSER_HOME
+
+# ############################################################################
+
+# Adding labels for external usage
+LABEL ruby.version_32=$TSN_ASDF_RUBY_VERSION_32
+
+# ############################################################################
+#
+#   IBM POWER8 architecture maintenance for                 |)|)/` / /| | [~
+#   Ruby runtime environments                               | | \,(_)~|~|_[_
+#
+# ############################################################################
+
+FROM ruby-all AS ruby-ppc64le
+
+# Define Ruby versions to be installed via ASDF
+ENV TSN_ASDF_RUBY_VERSION_33=3.3.5
+ENV TSN_ASDF_RUBY_VERSION=$TSN_ASDF_RUBY_VERSION_33
+
+# ############################################################################
+
+# Install Ruby versions and set default version
+RUN asdf install ruby $TSN_ASDF_RUBY_VERSION \
+ && asdf global  ruby $TSN_ASDF_RUBY_VERSION \
+ && asdf reshim  ruby \
+    \
+ && asdf local   ruby $TSN_ASDF_RUBY_VERSION \
+ && asdf list    ruby \
+    \
+ && bundle --version \
+ && bundler --version \
+ && erb --version \
+ && irb --version \
+ && racc --version \
+ && rake --version \
+ && rbs --version \
+ && rdbg --version \
+ && rdoc --version \
+ && ri --version \
+ && ruby --version \
+ && gem --version \
+ && gem list
+
+# ############################################################################
+
+# Adding labels for external usage
+LABEL ruby.version_33=$TSN_ASDF_RUBY_VERSION_33
+
+# ############################################################################
+#
+#   IBM z-Systems architecture maintenance for                   (`')(~)/\\/
+#   Ruby runtime environments                                    _).) / \//\
+#
+# ############################################################################
+
+FROM ruby-all AS ruby-s390x
+
+# Define Ruby versions to be installed via ASDF
+ENV TSN_ASDF_RUBY_VERSION_33=3.3.5
+ENV TSN_ASDF_RUBY_VERSION=$TSN_ASDF_RUBY_VERSION_33
+
+# ############################################################################
+
+# Install Ruby versions and set default version
+RUN asdf install ruby $TSN_ASDF_RUBY_VERSION \
+ && asdf global  ruby $TSN_ASDF_RUBY_VERSION \
+ && asdf reshim  ruby \
+    \
+ && asdf local   ruby $TSN_ASDF_RUBY_VERSION \
+ && asdf list    ruby \
+    \
+ && bundle --version \
+ && bundler --version \
+ && erb --version \
+ && irb --version \
+ && racc --version \
+ && rake --version \
+ && rbs --version \
+ && rdbg --version \
+ && rdoc --version \
+ && ri --version \
+ && ruby --version \
+ && gem --version \
+ && gem list
+
+# ############################################################################
+
+# Adding labels for external usage
+LABEL ruby.version_33=$TSN_ASDF_RUBY_VERSION_33
+
+# ############################################################################
+#                                                                  ┏┓┳┳┓┏┓┓
+#   Final maintenance for Ruby runtime environments                ┣ ┃┃┃┣┫┃
+#                                                                  ┻ ┻┛┗┛┗┗┛
+# ############################################################################
+
+FROM ruby-${TARGETARCH} AS ruby
+
+# Adding labels for external usage
+LABEL ruby.version=$TSN_ASDF_RUBY_VERSION

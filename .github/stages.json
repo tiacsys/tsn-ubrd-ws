@@ -7,6 +7,7 @@
 		{ "stage": "python" },
 		{ "stage": "golang", "ghr-free-disk": true },
 		{ "stage": "nodejs", "ghr-free-disk": true },
+		{ "stage": "ruby", "ghr-free-disk": true },
 		{ "stage": "push", "ghr-free-disk": true }
 	]
 }

@@ -190,6 +190,13 @@ Multiple runtime environments
    " ", "*18.20.4*",    "| ``TSN_ASDF_NODEJS_VERSION_18``",   "x", " ", "x", " ", " ", " "
    "x", "**18.19.1**",  "| ``TSN_ASDF_NODEJS_VERSION``
                          | ``TSN_ASDF_NODEJS_VERSION_18``",   " ", " ", " ", "#", " ", " "
+   " ", "|Ruby|_:",     "|",                                  " ", " ", " ", " ", " ", " "
+   "x", "**3.3.5**",    "| ``TSN_ASDF_RUBY_VERSION``
+                         | ``TSN_ASDF_RUBY_VERSION_33``",     "x", " ", "x", " ", "x", "x"
+   " ", "*3.2.5*",      "| ``TSN_ASDF_RUBY_VERSION_32``",     "x", " ", "x", " ", " ", " "
+   "x", "**3.2.3**",    "| ``TSN_ASDF_RUBY_VERSION``
+                         | ``TSN_ASDF_RUBY_VERSION_32``",     " ", "#", " ", "#", " ", " "
+   " ", "*3.1.6*",      "| ``TSN_ASDF_RUBY_VERSION_31``",     "x", " ", "x", " ", " ", " "
 
 .. [*] Default version (bold).
 
