@@ -3,6 +3,7 @@
 		{ "stage": "base" },
 		{ "stage": "cmake" },
 		{ "stage": "ninja" },
+		{ "stage": "rust" },
 		{ "stage": "python" },
 		{ "stage": "golang", "ghr-free-disk": true },
 		{ "stage": "nodejs", "ghr-free-disk": true },

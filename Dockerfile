@@ -673,6 +673,83 @@ FROM ninja-${TARGETARCH} AS ninja
 LABEL ninja.version=$TSN_ASDF_NINJA_VERSION
 
 
+#  -- about 10 minutes
+#  ______________________________
+#      ____
+#      /    )
+#  ---/___ /------------__---_/_-
+#    /    |    /   /   (_ `  /
+#  _/_____|___(___(___(__)__(_ __
+#
+#
+
+# ############################################################################
+#                                                                     ┏┓┓ ┓
+#   All architectures maintenance for Rust runtime environments       ┣┫┃ ┃
+#                                                                     ┛┗┗┛┗┛
+# ############################################################################
+
+FROM ninja AS rust-all
+
+#
+# Rust runtime versions
+# https://releases.rs/
+# https://github.com/code-lever/asdf-rust
+# https://github.com/code-lever/asdf-rust/commits
+#
+
+# Define Rust versions to be installed via ASDF
+ENV TSN_ASDF_RUST_VERSION_2022=1.67.1
+ENV TSN_ASDF_RUST_VERSION_2023=1.76.0
+ENV TSN_ASDF_RUST_VERSION_2024=1.82.0
+ENV TSN_ASDF_RUST_VERSION=$TSN_ASDF_RUST_VERSION_2023
+
+# ############################################################################
+
+# Install Rust versions and set default version
+RUN asdf install rust $TSN_ASDF_RUST_VERSION_2022 \
+ && asdf global  rust $TSN_ASDF_RUST_VERSION_2022 \
+ && asdf reshim  rust \
+    \
+ && asdf install rust $TSN_ASDF_RUST_VERSION_2023 \
+ && asdf global  rust $TSN_ASDF_RUST_VERSION_2023 \
+ && asdf reshim  rust \
+    \
+ && asdf install rust $TSN_ASDF_RUST_VERSION_2024 \
+ && asdf global  rust $TSN_ASDF_RUST_VERSION_2024 \
+ && asdf reshim  rust \
+    \
+ && asdf local   rust $TSN_ASDF_RUST_VERSION \
+ && asdf list    rust \
+    \
+ && cargo --version \
+ && cargo-fmt --version \
+ && cargo-clippy --version \
+ && rustfmt --version \
+ && rustdoc --version \
+ && rustc --version \
+ && rustup --version \
+ && rustup component list --installed \
+ && rustup target list --installed \
+ && rustup toolchain list --verbose \
+ && rustup show active-toolchain \
+ && rustup show home
+
+# ############################################################################
+#                                                                  ┏┓┳┳┓┏┓┓
+#   Final maintenance for Rust runtime environments                ┣ ┃┃┃┣┫┃
+#                                                                  ┻ ┻┛┗┛┗┗┛
+# ############################################################################
+
+FROM rust-all AS rust
+
+# Adding labels for external usage
+LABEL rust.version_2022=$TSN_ASDF_RUST_VERSION_2022
+LABEL rust.version_2023=$TSN_ASDF_RUST_VERSION_2023
+LABEL rust.version_2024=$TSN_ASDF_RUST_VERSION_2024
+LABEL rust.version=$TSN_ASDF_RUST_VERSION
+
+
 #  -- about 2 hours
 #  ____________________________________________
 #      ____
@@ -689,7 +766,7 @@ LABEL ninja.version=$TSN_ASDF_NINJA_VERSION
 #                                                                     ┛┗┗┛┗┛
 # ############################################################################
 
-FROM ninja AS python-all
+FROM rust AS python-all
 
 #
 # Python runtime versions

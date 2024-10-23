@@ -164,6 +164,11 @@ Multiple runtime environments
    "x", "**3.30.5**",   "| ``TSN_ASDF_CMAKE_VERSION``
                          | ``TSN_ASDF_CMAKE_VERSION_330``",   "x", "x", "x", "x", "x", "x"
    " ", "*3.20.6*",     "| ``TSN_ASDF_CMAKE_VERSION_320``",   "x", "x", "x", "x", "x", "x"
+   " ", "|Rust|_:",     "|",                                  " ", " ", " ", " ", " ", " "
+   "x", "**1.82.0**",   "| ``TSN_ASDF_RUST_VERSION``
+                         | ``TSN_ASDF_RUST_VERSION_2024``",   "x", "x", "x", "x", "x", "x"
+   " ", "*1.76.0*",     "| ``TSN_ASDF_RUST_VERSION_2023``",   "x", "x", "x", "x", "x", "x"
+   " ", "*1.67.1*",     "| ``TSN_ASDF_RUST_VERSION_2022``",   "x", "x", "x", "x", "x", "x"
    " ", "|Python|_:",   "|",                                  " ", " ", " ", " ", " ", " "
    " ", "*3.13.0*",     "| ``TSN_ASDF_PYTHON_VERSION_313``",  "x", " ", "x", " ", " ", " "
    "x", "**3.12.7**",   "| ``TSN_ASDF_PYTHON_VERSION``
