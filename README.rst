@@ -174,6 +174,8 @@ Multiple runtime environments
    "x", "**3.12.7**",   "| ``TSN_ASDF_PYTHON_VERSION``
                          | ``TSN_ASDF_PYTHON_VERSION_312``",  "x", "x", "x", "x", "x", "x"
    " ", "*3.10.15*",    "| ``TSN_ASDF_PYTHON_VERSION_310``",  "x", " ", "x", " ", " ", " "
+   " ", "|PyPA pipx|_:","|",                                  " ", " ", " ", " ", " ", " "
+   "x", "**1.7.1**",    "| ``TSN_ASDF_PIPX_VERSION``",        "x", "x", "x", "x", "x", "x"
    " ", "|Golang|_:",   "|",                                  " ", " ", " ", " ", " ", " "
    "x", "**1.23.2**",   "| ``TSN_ASDF_GOLANG_VERSION``
                          | ``TSN_ASDF_GOLANG_VERSION_2024``", "x", "x", "x", "x", "x", " "
@@ -213,6 +215,19 @@ Multiple runtime environments
    "``wheel==0.44.0``",        "``TSN_ASDF_PYPI_WHEEL_VERSION``",      "x", "x", "x", "x", "x", "x"
    "``poetry==1.8.4``",        "``TSN_ASDF_PYPI_POETRY_VERSION``",     "x", "x", "x", "x", "x", "x"
    "``west==1.3.0``",          "``TSN_ASDF_PYPI_WEST_VERSION``",       "x", "x", "x", "x", "x", "x"
+
+.. csv-table:: Python 3 packages from `PyPI`_ based on `PyPA pipx`_ with default Python
+   :header: "Package", "Shell Variable", "``amd64``", "``arm/v7``", "``arm64/v8``", "``riscv64``", "``ppc64le``", "``s390x``"
+   :widths: 20 50 5 5 5 5 5 5
+   :stub-columns: 1
+
+   "``poetry@1.8.4``",         "``TSN_ASDF_POETRY_VERSION_18``",       "x", "x", "x", "x", "x", "x"
+   "``poetry@1.7.1``",         "``TSN_ASDF_POETRY_VERSION_17``",       "x", "x", "x", "x", "x", "x"
+   "``poetry@1.6.1``",         "``TSN_ASDF_POETRY_VERSION_16``",       "x", "x", "x", "x", "x", "x"
+   "``poetry@1.5.1``",         "``TSN_ASDF_POETRY_VERSION_15``",       "x", "x", "x", "x", "x", "x"
+   "``poetry@1.4.2``",         "``TSN_ASDF_POETRY_VERSION_14``",       "x", "x", "x", "x", "x", "x"
+   "``poetry@1.3.2``",         "``TSN_ASDF_POETRY_VERSION_13``",       "x", "x", "x", "x", "x", "x"
+   "``poetry@1.2.2``",         "``TSN_ASDF_POETRY_VERSION_12``",       "x", "x", "x", "x", "x", "x"
 
 .. rubric:: `Ninja`_ extra requirements for `ASDF`_
 

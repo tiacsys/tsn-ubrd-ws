@@ -2105,3 +2105,135 @@ FROM ruby-${TARGETARCH} AS ruby
 
 # Adding labels for external usage
 LABEL ruby.version=$TSN_ASDF_RUBY_VERSION
+
+
+#  -- about 20 minutes
+#  ___________________________________________________________
+#      ____           ____     __
+#      /    )         /    )   / |               ,
+#  ---/____/---------/____/---/__|---------__----------__---|/
+#    /        /   / /        /   |       /   ) /     /   )  |
+#  _/________(___/_/________/____|______/___/_/_____/___/__/|_
+#               /                      /           /      /
+#           (_ /                      /           /
+
+# ############################################################################
+#                                                                     ┏┓┓ ┓
+#   All architectures maintenance for PyPA pipx version packaging     ┣┫┃ ┃
+#                                                                     ┛┗┗┛┗┛
+# ############################################################################
+
+FROM ruby AS pipx-all
+
+#
+# PyPA pipx multi-version packaging
+# https://pipx.pypa.io/
+# https://pipx.pypa.io/stable/CHANGELOG
+# https://github.com/pypa/pipx/releases
+# https://github.com/yozachar/asdf-pipx
+# https://github.com/yozachar/asdf-pipx/commits
+#
+
+# Define PyPA pipx versions to be installed via ASDF
+# - https://pypi.org/project/pipx/1.7.1
+# - https://pypi.org/project/argcomplete/3.5.1
+ENV TSN_ASDF_PIPX_VERSION=1.7.1
+ENV TSN_ASDF_PIPX_ARGCOMPLETE_VERSION=3.5.1
+
+# Define Python package versions to be installed via PyPA pipx
+# - https://pypi.org/project/poetry/1.8.4
+# - https://pypi.org/project/poetry/1.7.1
+# - https://pypi.org/project/poetry/1.6.1
+# - https://pypi.org/project/poetry/1.5.1
+# - https://pypi.org/project/poetry/1.4.2
+# - https://pypi.org/project/poetry/1.3.2
+# - https://pypi.org/project/poetry/1.2.2
+# - https://pypi.org/project/poetry/1.1.15
+ENV TSN_ASDF_PIPX_POETRY_VERSION_18=1.8.4
+ENV TSN_ASDF_PIPX_POETRY_VERSION_17=1.7.1
+ENV TSN_ASDF_PIPX_POETRY_VERSION_16=1.6.1
+ENV TSN_ASDF_PIPX_POETRY_VERSION_15=1.5.1
+ENV TSN_ASDF_PIPX_POETRY_VERSION_14=1.4.2
+ENV TSN_ASDF_PIPX_POETRY_VERSION_13=1.3.2
+ENV TSN_ASDF_PIPX_POETRY_VERSION_12=1.2.2
+
+# ############################################################################
+
+# Install PyPA pipx versions, set default version, ensure PATH environment
+# variable for PyPA pipx, enable shell completions for PyPA pipx, and install
+# Python package versions into the defaul local Python environment.
+RUN asdf install pipx $TSN_ASDF_PIPX_VERSION \
+ && asdf global  pipx $TSN_ASDF_PIPX_VERSION \
+ && asdf reshim  pipx \
+    \
+ && asdf local   pipx $TSN_ASDF_PIPX_VERSION \
+ && asdf list    pipx \
+    \
+ && pipx install argcomplete==$TSN_ASDF_PIPX_ARGCOMPLETE_VERSION \
+ && pipx pin     argcomplete \
+    \
+ && pipx ensurepath \
+ && echo "eval \"\$(register-python-argcomplete --shell bash pipx)\"" \
+ >> $WSUSER_HOME/.bashrc \
+    \
+ && pipx install --suffix=@$TSN_ASDF_PIPX_POETRY_VERSION_18 \
+                   poetry==$TSN_ASDF_PIPX_POETRY_VERSION_18 \
+ && pipx pin       poetry@$TSN_ASDF_PIPX_POETRY_VERSION_18 \
+    \
+ && pipx install --suffix=@$TSN_ASDF_PIPX_POETRY_VERSION_17 \
+                   poetry==$TSN_ASDF_PIPX_POETRY_VERSION_17 \
+ && pipx pin       poetry@$TSN_ASDF_PIPX_POETRY_VERSION_17 \
+    \
+ && pipx install --suffix=@$TSN_ASDF_PIPX_POETRY_VERSION_16 \
+                   poetry==$TSN_ASDF_PIPX_POETRY_VERSION_16 \
+ && pipx pin       poetry@$TSN_ASDF_PIPX_POETRY_VERSION_16 \
+    \
+ && pipx install --suffix=@$TSN_ASDF_PIPX_POETRY_VERSION_15 \
+                   poetry==$TSN_ASDF_PIPX_POETRY_VERSION_15 \
+ && pipx pin       poetry@$TSN_ASDF_PIPX_POETRY_VERSION_15 \
+    \
+ && pipx install --suffix=@$TSN_ASDF_PIPX_POETRY_VERSION_14 \
+                   poetry==$TSN_ASDF_PIPX_POETRY_VERSION_14 \
+ && pipx pin       poetry@$TSN_ASDF_PIPX_POETRY_VERSION_14 \
+    \
+ && pipx install --suffix=@$TSN_ASDF_PIPX_POETRY_VERSION_13 \
+                   poetry==$TSN_ASDF_PIPX_POETRY_VERSION_13 \
+ && pipx pin       poetry@$TSN_ASDF_PIPX_POETRY_VERSION_13 \
+    \
+ && pipx install --suffix=@$TSN_ASDF_PIPX_POETRY_VERSION_12 \
+                   poetry==$TSN_ASDF_PIPX_POETRY_VERSION_12 \
+ && pipx pin       poetry@$TSN_ASDF_PIPX_POETRY_VERSION_12 \
+    \
+ && pipx --version \
+ && pipx environment --verbose \
+ && pipx list --verbose \
+    \
+ && eval "PATH=\${PATH}:\$(pipx environment --value PIPX_BIN_DIR)" \
+ && poetry@$TSN_ASDF_PIPX_POETRY_VERSION_18 --version \
+ && poetry@$TSN_ASDF_PIPX_POETRY_VERSION_17 --version \
+ && poetry@$TSN_ASDF_PIPX_POETRY_VERSION_16 --version \
+ && poetry@$TSN_ASDF_PIPX_POETRY_VERSION_15 --version \
+ && poetry@$TSN_ASDF_PIPX_POETRY_VERSION_14 --version \
+ && poetry@$TSN_ASDF_PIPX_POETRY_VERSION_13 --version \
+ && poetry@$TSN_ASDF_PIPX_POETRY_VERSION_12 --version
+
+# ############################################################################
+#                                                                  ┏┓┳┳┓┏┓┓
+#   Final maintenance for PyPA pipx version packaging              ┣ ┃┃┃┣┫┃
+#                                                                  ┻ ┻┛┗┛┗┗┛
+# ############################################################################
+
+FROM pipx-all AS pipx
+
+# ############################################################################
+
+# Adding labels for external usage
+LABEL pipx.version=$TSN_ASDF_PIPX_VERSION
+LABEL pipx.argcomplete.version=$TSN_ASDF_PIPX_ARGCOMPLETE_VERSION
+LABEL pipx.poetry.version_18=$TSN_ASDF_PIPX_POETRY_VERSION_18
+LABEL pipx.poetry.version_17=$TSN_ASDF_PIPX_POETRY_VERSION_17
+LABEL pipx.poetry.version_16=$TSN_ASDF_PIPX_POETRY_VERSION_16
+LABEL pipx.poetry.version_15=$TSN_ASDF_PIPX_POETRY_VERSION_15
+LABEL pipx.poetry.version_14=$TSN_ASDF_PIPX_POETRY_VERSION_14
+LABEL pipx.poetry.version_13=$TSN_ASDF_PIPX_POETRY_VERSION_13
+LABEL pipx.poetry.version_12=$TSN_ASDF_PIPX_POETRY_VERSION_12
