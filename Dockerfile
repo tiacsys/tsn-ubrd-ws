@@ -1474,6 +1474,10 @@ FROM golang AS nodejs-all
 # https://github.com/asdf-vm/asdf-nodejs/commits
 #
 
+# Define Node.js package versions to be installed via npm
+# - https://www.npmjs.com/package/corepack/v/0.29.4
+ENV TSN_ASDF_NPM_COREPACK_VERSION=0.29.4
+
 # ############################################################################
 #
 #   AMD/x86 64-bit architecture maintenance for               /||\/||\ / /|
@@ -1492,7 +1496,10 @@ ENV TSN_ASDF_NODEJS_VERSION=$TSN_ASDF_NODEJS_VERSION_20
 # ############################################################################
 
 # Install Node.js versions and set default version
-RUN ASDF_NODEJS_VERBOSE_INSTALL=yes \
+RUN echo "corepack@$TSN_ASDF_NPM_COREPACK_VERSION" \
+ >> $WSUSER_HOME/.default-npm-packages \
+    \
+ && ASDF_NODEJS_VERBOSE_INSTALL=yes \
     asdf install nodejs $TSN_ASDF_NODEJS_VERSION_18 \
  && asdf global  nodejs $TSN_ASDF_NODEJS_VERSION_18 \
  && asdf reshim  nodejs \
@@ -1539,7 +1546,10 @@ ENV TSN_ASDF_NODEJS_VERSION=$TSN_ASDF_NODEJS_VERSION_20
 # ############################################################################
 
 # Install Node.js versions and set default version
-RUN ASDF_NODEJS_VERBOSE_INSTALL=yes \
+RUN echo "corepack@$TSN_ASDF_NPM_COREPACK_VERSION" \
+ >> $WSUSER_HOME/.default-npm-packages \
+    \
+ && ASDF_NODEJS_VERBOSE_INSTALL=yes \
     asdf install nodejs $TSN_ASDF_NODEJS_VERSION \
  && asdf global  nodejs $TSN_ASDF_NODEJS_VERSION \
  && asdf reshim  nodejs \
@@ -1576,7 +1586,10 @@ ENV TSN_ASDF_NODEJS_VERSION=$TSN_ASDF_NODEJS_VERSION_20
 # ############################################################################
 
 # Install Node.js versions and set default version
-RUN ASDF_NODEJS_VERBOSE_INSTALL=yes \
+RUN echo "corepack@$TSN_ASDF_NPM_COREPACK_VERSION" \
+ >> $WSUSER_HOME/.default-npm-packages \
+    \
+ && ASDF_NODEJS_VERBOSE_INSTALL=yes \
     asdf install nodejs $TSN_ASDF_NODEJS_VERSION_18 \
  && asdf global  nodejs $TSN_ASDF_NODEJS_VERSION_18 \
  && asdf reshim  nodejs \
@@ -1639,7 +1652,7 @@ RUN apt-get --assume-yes update \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
     \
- && npm install --global corepack \
+ && npm install --global corepack@$TSN_ASDF_NPM_COREPACK_VERSION \
     \
  && npm --version \
  && npx --version \
@@ -1674,7 +1687,10 @@ ENV TSN_ASDF_NODEJS_VERSION=$TSN_ASDF_NODEJS_VERSION_20
 # ############################################################################
 
 # Install Node.js versions and set default version
-RUN ASDF_NODEJS_VERBOSE_INSTALL=yes \
+RUN echo "corepack@$TSN_ASDF_NPM_COREPACK_VERSION" \
+ >> $WSUSER_HOME/.default-npm-packages \
+    \
+ && ASDF_NODEJS_VERBOSE_INSTALL=yes \
     asdf install nodejs $TSN_ASDF_NODEJS_VERSION \
  && asdf global  nodejs $TSN_ASDF_NODEJS_VERSION \
  && asdf reshim  nodejs \
@@ -1709,7 +1725,10 @@ ENV TSN_ASDF_NODEJS_VERSION=$TSN_ASDF_NODEJS_VERSION_20
 # ############################################################################
 
 # Install Node.js versions and set default version
-RUN ASDF_NODEJS_VERBOSE_INSTALL=yes \
+RUN echo "corepack@$TSN_ASDF_NPM_COREPACK_VERSION" \
+ >> $WSUSER_HOME/.default-npm-packages \
+    \
+ && ASDF_NODEJS_VERBOSE_INSTALL=yes \
     asdf install nodejs $TSN_ASDF_NODEJS_VERSION \
  && asdf global  nodejs $TSN_ASDF_NODEJS_VERSION \
  && asdf reshim  nodejs \
@@ -1738,6 +1757,7 @@ FROM nodejs-${TARGETARCH} AS nodejs
 
 # Adding labels for external usage
 LABEL nodejs.version=$TSN_ASDF_NODEJS_VERSION
+LABEL nodejs.corepack.version=$TSN_ASDF_NPM_COREPACK_VERSION
 
 
 #  -- about 3 hours

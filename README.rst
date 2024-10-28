@@ -229,6 +229,13 @@ Multiple runtime environments
    "``poetry@1.3.2``",         "``TSN_ASDF_POETRY_VERSION_13``",       "x", "x", "x", "x", "x", "x"
    "``poetry@1.2.2``",         "``TSN_ASDF_POETRY_VERSION_12``",       "x", "x", "x", "x", "x", "x"
 
+.. csv-table:: Node.js packages from `Npm.js`_ based on `Npm`_
+   :header: "Package", "Shell Variable", "``amd64``", "``arm/v7``", "``arm64/v8``", "``riscv64``", "``ppc64le``", "``s390x``"
+   :widths: 20 50 5 5 5 5 5 5
+   :stub-columns: 1
+
+   "``corepack@0.29.4``",       "``TSN_ASDF_NPM_COREPACK_VERSION``",     "x", "x", "x", "x", "x", "x"
+
 .. rubric:: `Ninja`_ extra requirements for `ASDF`_
 
 - https://github.com/asdf-vm/asdf-plugins?tab=readme-ov-file
