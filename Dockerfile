@@ -1448,7 +1448,7 @@ FROM golang-${TARGETARCH} AS golang
 LABEL golang.version=$TSN_ASDF_GOLANG_VERSION
 
 
-#  -- about 10 minutes
+#  -- about 20 minutes
 #  ____________________________________________________
 #      _     _
 #      /|   /                /                  ,
@@ -1477,8 +1477,10 @@ FROM golang AS nodejs-all
 # Define Node.js package versions to be installed via npm
 # - https://www.npmjs.com/package/corepack/v/0.29.4
 # - https://www.npmjs.com/package/decktape/v/3.14.0
+# - https://www.npmjs.com/package/svg-term-cli/v/2.1.1
 ENV TSN_ASDF_NPM_COREPACK_VERSION=0.29.4
 ENV TSN_ASDF_NPM_DECKTAPE_VERSION=3.14.0
+ENV TSN_ASDF_NPM_SVG_TERM_CLI_VERSION=2.1.1
 
 # ############################################################################
 #
@@ -1501,6 +1503,8 @@ ENV TSN_ASDF_NODEJS_VERSION=$TSN_ASDF_NODEJS_VERSION_20
 RUN echo "corepack@$TSN_ASDF_NPM_COREPACK_VERSION" \
  >> $WSUSER_HOME/.default-npm-packages \
  && echo "decktape@$TSN_ASDF_NPM_DECKTAPE_VERSION" \
+ >> $WSUSER_HOME/.default-npm-packages \
+ && echo "svg-term-cli@$TSN_ASDF_NPM_SVG_TERM_CLI_VERSION" \
  >> $WSUSER_HOME/.default-npm-packages \
     \
  && ASDF_NODEJS_VERBOSE_INSTALL=yes \
@@ -1527,7 +1531,8 @@ RUN echo "corepack@$TSN_ASDF_NPM_COREPACK_VERSION" \
  && npm list --global \
  && corepack --version \
     \
- && decktape version
+ && decktape version \
+ && svg-term --version
 
 # ############################################################################
 
@@ -1556,6 +1561,8 @@ RUN echo "corepack@$TSN_ASDF_NPM_COREPACK_VERSION" \
  >> $WSUSER_HOME/.default-npm-packages \
  && echo "decktape@$TSN_ASDF_NPM_DECKTAPE_VERSION" \
  >> $WSUSER_HOME/.default-npm-packages \
+ && echo "svg-term-cli@$TSN_ASDF_NPM_SVG_TERM_CLI_VERSION" \
+ >> $WSUSER_HOME/.default-npm-packages \
     \
  && ASDF_NODEJS_VERBOSE_INSTALL=yes \
     asdf install nodejs $TSN_ASDF_NODEJS_VERSION \
@@ -1571,7 +1578,8 @@ RUN echo "corepack@$TSN_ASDF_NPM_COREPACK_VERSION" \
  && npm list --global \
  && corepack --version \
     \
- && decktape version
+ && decktape version \
+ && svg-term --version
 
 # ############################################################################
 
@@ -1600,6 +1608,8 @@ RUN echo "corepack@$TSN_ASDF_NPM_COREPACK_VERSION" \
  >> $WSUSER_HOME/.default-npm-packages \
  && echo "decktape@$TSN_ASDF_NPM_DECKTAPE_VERSION" \
  >> $WSUSER_HOME/.default-npm-packages \
+ && echo "svg-term-cli@$TSN_ASDF_NPM_SVG_TERM_CLI_VERSION" \
+ >> $WSUSER_HOME/.default-npm-packages \
     \
  && ASDF_NODEJS_VERBOSE_INSTALL=yes \
     asdf install nodejs $TSN_ASDF_NODEJS_VERSION_18 \
@@ -1625,7 +1635,8 @@ RUN echo "corepack@$TSN_ASDF_NPM_COREPACK_VERSION" \
  && npm list --global \
  && corepack --version \
     \
- && decktape version
+ && decktape version \
+ && svg-term --version
 
 # ############################################################################
 
@@ -1668,6 +1679,7 @@ RUN apt-get --assume-yes update \
     \
  && npm install --global corepack@$TSN_ASDF_NPM_COREPACK_VERSION \
  && npm install --global decktape@$TSN_ASDF_NPM_DECKTAPE_VERSION \
+ && npm install --global svg-term-cli@$TSN_ASDF_NPM_SVG_TERM_CLI_VERSION \
     \
  && npm --version \
  && npx --version \
@@ -1675,7 +1687,8 @@ RUN apt-get --assume-yes update \
  && npm list --global \
  && corepack --version \
     \
- && decktape version
+ && decktape version \
+ && svg-term --version
 
 # ############################################################################
 
@@ -1708,6 +1721,8 @@ RUN echo "corepack@$TSN_ASDF_NPM_COREPACK_VERSION" \
  >> $WSUSER_HOME/.default-npm-packages \
  && echo "decktape@$TSN_ASDF_NPM_DECKTAPE_VERSION" \
  >> $WSUSER_HOME/.default-npm-packages \
+ && echo "svg-term-cli@$TSN_ASDF_NPM_SVG_TERM_CLI_VERSION" \
+ >> $WSUSER_HOME/.default-npm-packages \
     \
  && ASDF_NODEJS_VERBOSE_INSTALL=yes \
     asdf install nodejs $TSN_ASDF_NODEJS_VERSION \
@@ -1723,7 +1738,8 @@ RUN echo "corepack@$TSN_ASDF_NPM_COREPACK_VERSION" \
  && npm list --global \
  && corepack --version \
     \
- && decktape version
+ && decktape version \
+ && svg-term --version
 
 # ############################################################################
 
@@ -1750,6 +1766,8 @@ RUN echo "corepack@$TSN_ASDF_NPM_COREPACK_VERSION" \
  >> $WSUSER_HOME/.default-npm-packages \
  && echo "decktape@$TSN_ASDF_NPM_DECKTAPE_VERSION" \
  >> $WSUSER_HOME/.default-npm-packages \
+ && echo "svg-term-cli@$TSN_ASDF_NPM_SVG_TERM_CLI_VERSION" \
+ >> $WSUSER_HOME/.default-npm-packages \
     \
  && ASDF_NODEJS_VERBOSE_INSTALL=yes \
     asdf install nodejs $TSN_ASDF_NODEJS_VERSION \
@@ -1765,7 +1783,8 @@ RUN echo "corepack@$TSN_ASDF_NPM_COREPACK_VERSION" \
  && npm list --global \
  && corepack --version \
     \
- && decktape version
+ && decktape version \
+ && svg-term --version
 
 # ############################################################################
 
@@ -1784,6 +1803,7 @@ FROM nodejs-${TARGETARCH} AS nodejs
 LABEL nodejs.version=$TSN_ASDF_NODEJS_VERSION
 LABEL nodejs.corepack.version=$TSN_ASDF_NPM_COREPACK_VERSION
 LABEL nodejs.decktape.version=$TSN_ASDF_NPM_DECKTAPE_VERSION
+LABEL nodejs.svg-term-cli.version=$TSN_ASDF_NPM_SVG_TERM_CLI_VERSION
 
 
 #  -- about 3 hours
