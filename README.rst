@@ -235,6 +235,7 @@ Multiple runtime environments
    :stub-columns: 1
 
    "``corepack@0.29.4``",       "``TSN_ASDF_NPM_COREPACK_VERSION``",     "x", "x", "x", "x", "x", "x"
+   "``decktape@3.14.0``",       "``TSN_ASDF_NPM_DECKTAPE_VERSION``",     "x", "x", "x", "x", "x", "x"
 
 .. rubric:: `Ninja`_ extra requirements for `ASDF`_
 
